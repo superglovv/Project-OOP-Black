@@ -1,4 +1,4 @@
-# OOP Template
+# Proiect POO - BlackJack One-on-one 
 
 ### Tema 0
 
