@@ -363,7 +363,7 @@ int main() { bool sessionEnd = false;
             players[0].setCredits(players[0].getCredits()+totalBet2);
             players[1].setCredits(players[1].getCredits()-totalBet2);
             hasBet=0;
-        }else if(players[1].getScore() == 21 && players[0].getScore() == 21 && players[1].getRole() == Role::Dealer && !ended){
+        }else if(players[1].getScore() == 21 && players[0].getScore() == 21 && players[1].getRole() == Role::Dealer){
             std::cout << "\n!!! The winner is: " << players[1].getName() << " #5" << std::endl;
             players[0].setCredits(players[0].getCredits()-totalBet1);
             players[1].setCredits(players[1].getCredits()+totalBet1);
