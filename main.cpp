@@ -251,12 +251,13 @@ int main() { bool sessionEnd = false;
                 Keep
             };
 
-            int bettingChoice;
+
 
 
             if (hasBet == 0){
                 std::cout << "\nInitial bet: 50 credits; Wanna bet more?" << std::endl;
                 std::cout << "Current player: " << players[0].getName() << " (choose 'yes' (0) or 'no' (1)): " << std::endl;
+                int bettingChoice;
                 std::cin >> bettingChoice;
 
                 int betAmount;
