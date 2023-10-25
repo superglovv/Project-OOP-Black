@@ -68,7 +68,7 @@ public:
         std::random_device rd;
         std::mt19937 gen(rd());
 
-        for (int i = 0; i < size - 1; i++) {
+        for (unsigned int i = 0; i < size - 1; i++) {
             std::uniform_int_distribution<unsigned int> distribution(i, size - 1);
             unsigned int j = distribution(gen);
             std::swap(cards[i], cards[j]);
