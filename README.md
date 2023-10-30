@@ -1,26 +1,28 @@
 # Proiect POO - BlackJack One-on-one 
 
+Voi realiza o versiune a jocului Black Jack în doi, jucător versus dealer. Scopul jucătorilor este acela de a obține o mână cu un total de puncte mai aproape de 21 decât mâna dealerului (banca), fără a depăși 21.
+
 ### Tema 0
 
-- [ ] Nume proiect (poate fi schimbat ulterior)
-- [ ] Scurtă descriere a temei alese, ce v-ați propus să implementați
+- [x] Nume proiect (poate fi schimbat ulterior)
+- [x] Scurtă descriere a temei alese, ce v-ați propus să implementați
 
 ## Tema 1
 
 #### Cerințe
-- [ ] definirea a minim **3-4 clase** folosind compunere
-- [ ] constructori de inițializare
-- [ ] pentru o clasă: constructor de copiere, `operator=` de copiere, destructor
-<!-- - [ ] pentru o altă clasă: constructor de mutare, `operator=` de mutare, destructor -->
-<!-- - [ ] pentru o altă clasă: toate cele 5 funcții membru speciale -->
-- [ ] `operator<<` pentru toate clasele pentru afișare (std::ostream)
-- [ ] cât mai multe `const` (unde este cazul)
-- [ ] implementarea a minim 3 funcții membru publice pentru funcționalități specifice temei alese
-- [ ] scenariu de utilizare a claselor definite:
+- [x] definirea a minim **3-4 clase** folosind compunere
+- [x] constructori de inițializare
+- [x] pentru o clasă: constructor de copiere, `operator=` de copiere, destructor
+<!-- - [x] pentru o altă clasă: constructor de mutare, `operator=` de mutare, destructor -->
+<!-- - [x] pentru o altă clasă: toate cele 5 funcții membru speciale -->
+- [x] `operator<<` pentru toate clasele pentru afișare (std::ostream)
+- [x] cât mai multe `const` (unde este cazul)
+- [x] implementarea a minim 3 funcții membru publice pentru funcționalități specifice temei alese
+- [x] scenariu de utilizare a claselor definite:
   - crearea de obiecte și apelarea tuturor funcțiilor membru publice în main
   - vor fi adăugate în fișierul `tastatura.txt` exemple de date de intrare de la tastatură (dacă există)
-- [ ] tag de `git`: de exemplu `v0.1`
-- [ ] serviciu de integrare continuă (CI); exemplu: GitHub Actions
+- [x] tag de `git`: de exemplu `v0.1`
+- [x] serviciu de integrare continuă (CI); exemplu: GitHub Actions
 
 ## Tema 2
 
