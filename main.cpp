@@ -369,7 +369,7 @@ void gamePlay(std::vector<Player>& players) {
 }
 
 void startGame(){
-    int hasStopped = false;
+    bool hasStopped = false;
     std::vector<Player> players(2);
     players[0].setupPlayer();
     players[1].setupPlayer();
@@ -387,6 +387,7 @@ void startGame(){
                 gamePlay(players);
                 break;
             case Stand:
+                hasStopped = true;
                 break;
         }
     }
@@ -394,8 +395,6 @@ void startGame(){
 }
 
 int main() {
-    int nr = 1;
-
     startGame();
 
     return 0;
