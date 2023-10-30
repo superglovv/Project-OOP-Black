@@ -377,7 +377,6 @@ void startGame(int nr) {
         std::cout << "\n" << players[1].getName() << "'s Info:" << std::endl;
         std::cout << players[1];
 
-        nr++;
 
     }
 
@@ -386,7 +385,7 @@ int main() {
     int nr = 1;
 
     startGame(nr);
-
+    nr++;
     int choice2;
     std::cout << " Choose if you wanna continue (choose 'Go' (0) or 'Stop' (1)): " <<  std::endl;
     std::cin >> choice2;
