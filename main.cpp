@@ -267,8 +267,8 @@ void startGame(int nr) {
                             break;
                     }
                     std::cout << players[i].getName() << ", your total bet is: " << totalBet[i] << std::endl;
-                }
-            }hasBet++;
+                }hasBet++;
+            }
 
 
             std::cout << '\n' << totalBet[0] << ", " << totalBet[1] << '\n';
@@ -340,32 +340,26 @@ void startGame(int nr) {
             std::cout << "\n!!! The winner is: " << players[1].getName() << " #3" << std::endl;
             players[0].setCredits(players[0].getCredits()-totalBet[0]);
             players[1].setCredits(players[1].getCredits()+totalBet[0]);
-            hasBet=0;
         }else if(players[1].getScore() < 21 && players[0].getScore() <21 && players[1].getScore()<players[0].getScore() && playerStands > 0 && !ended){
             std::cout << "\n!!! The winner is: " << players[0].getName() << " #4" << std::endl;
             players[0].setCredits(players[0].getCredits()+totalBet[1]);
             players[1].setCredits(players[1].getCredits()-totalBet[1]);
-            hasBet=0;
         }else if(players[1].reachedTarget() && players[0].reachedTarget() && players[1].getRole() == Role::Dealer){
             std::cout << "\n!!! The winner is: " << players[1].getName() << " #5" << std::endl;
             players[0].setCredits(players[0].getCredits()-totalBet[0]);
             players[1].setCredits(players[1].getCredits()+totalBet[0]);
-            hasBet=0;
         }else if(players[1].reachedTarget() && players[0].reachedTarget() && players[1].getRole() == Role::Dealer && !ended){
             std::cout << "\n!!! The winner is: " << players[0].getName() << " #6" << std::endl;
             players[0].setCredits(players[0].getCredits()+totalBet[1]);
             players[1].setCredits(players[1].getCredits()-totalBet[1]);
-            hasBet=0;
         }else if(players[1].reachedTarget() && playerStands >= 1){
             std::cout << "\n!!! The winner is: " << players[1].getName() << " #7" << std::endl;
             players[0].setCredits(players[0].getCredits()-totalBet[0]);
             players[1].setCredits(players[1].getCredits()+totalBet[0]);
-            hasBet=0;
         } else if(players[0].reachedTarget() && playerStands >= 1){
             std::cout << "\n!!! The winner is: " << players[0].getName() << " #8" << std::endl;
             players[0].setCredits(players[0].getCredits()+totalBet[1]);
             players[1].setCredits(players[1].getCredits()-totalBet[1]);
-            hasBet=0;
         }
         if(players[1].getScore() == players[0].getScore() && playerStands > 0) std::cout << "Draw!" <<std::endl;
         std::cout << "\nThe match has ended!" << std::endl;
