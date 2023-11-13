@@ -210,6 +210,14 @@ void gamePlay(std::vector<Player>& players) {
 
 void startGame(){
     bool hasStopped = false;
+    Dealer dealer;
+    Bot bot;
+    Human human;
+
+    dealer.display();
+    bot.display();
+    human.display();
+
     std::vector<Player> players(2);
     players[0].setupPlayer();
     players[1].setupPlayer();

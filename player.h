@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 #include <utility>
 #include <vector>
@@ -8,74 +10,60 @@ enum class Role { Player, Dealer };
 
 class Player {
 public:
-    explicit Player(std::string initial_name = "Unknown", int initial_credits = 1000, Role player_role = Role::Player, int player_score = 0)
-            : name(std::move(initial_name)), credits(initial_credits), role(player_role), score(player_score) {}
-
-    Player& operator=(const Player& other) {
-        if (this != &other) {
-            name = other.name;
-            credits = other.credits;
-            role = other.role;
-            score = other.score;
-        }
-        return *this;
-    }
-
+    explicit Player(std::string initial_name = "Unknown", int initial_credits = 1000, Role player_role = Role::Player, int player_score = 0);
+    Player& operator=(const Player& other);
     ~Player() = default;
 
-    [[nodiscard]] int getCredits() const {
-        return credits;
-    }
+    [[nodiscard]] int getCredits() const;
+    void setCredits(const int& new_credits);
 
-    void setCredits (const int& new_credits){
-        credits = new_credits;
-    }
+    [[nodiscard]] int getScore() const;
+    [[nodiscard]] int reachedTarget() const;
 
-    [[nodiscard]] int getScore() const {
-        return score;
-    }
+    void setupPlayer();
+    void setScore(const int& new_score);
 
-    [[nodiscard]] int reachedTarget() const {
-        if (score == 21)
-            return 1;
-        return 0;
-    }
+    [[nodiscard]] std::string getName() const;
+    [[nodiscard]] Role getRole() const;
+    void setRole(Role new_role);
 
-    void setupPlayer(){
-        std::string name_insert;
-        std::cout << "Player's name: ";
-        std::cin >> name_insert;
-        name = name_insert;
-    }
+    virtual void display() const;
 
-    void setScore (const int& new_score){
-        score = new_score;
-    }
-
-    [[nodiscard]] std::string getName() const {
-        return name;
-    }
-
-
-    [[nodiscard]] Role getRole() const {
-        return role;
-    }
-
-    void setRole(Role new_role){
-        role = new_role;
-    }
-
-    friend std::ostream& operator<<(std::ostream& os, const Player& player) {
-        os << "Name: " << player.name << std::endl;
-        os << "Role: " << (player.role == Role::Player ? "Player" : "Dealer") << std::endl;
-        os << "Score: " << player.score << std::endl;
-        os << "Credits: " << player.credits << std::endl;
-        return os;
-    }
+    friend std::ostream& operator<<(std::ostream& os, const Player& player);
 
 private:
     std::string name;
-    int credits;
+    [[maybe_unused]] int credits;
     Role role;
     int score;
+};
+
+class Dealer : public Player {
+public:
+    explicit Dealer(std::string initial_name = "Dealer", int initial_credits = 10000)
+            : Player(std::move(initial_name), initial_credits, Role::Dealer) {}
+
+    void display() const override {
+        std::cout << "I AM DEALER\n";
+    }
+};
+
+class Bot : public Player {
+public:
+    explicit Bot(std::string initial_name = "Bot", int initial_credits = 500)
+            : Player(std::move(initial_name), initial_credits, Role::Player) {}
+
+    void display() const override {
+        std::cout << "I AM BOT\n";
+    }
+};
+
+class Human : public Player {
+public:
+    explicit Human(std::string initial_name = "Human", int initial_credits = 1000)
+            : Player(std::move(initial_name), initial_credits, Role::Player) {}
+
+    void display() const override {
+        std::cout << "I AM HUMAN\n";
+    }
 };

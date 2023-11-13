@@ -19,7 +19,12 @@ endif()
 set(is_debug "$<CONFIG:Debug>")
 set(is_rel_with_deb "$<CONFIG:RelWithDebInfo>")
 set(debug_mode "$<OR:${is_debug},${is_rel_with_deb}>")
-
+set(SOURCE_FILES
+        main.cpp
+        deck.cpp
+        card.cpp
+        player.cpp
+)
 ###############################################################################
 
 # custom functions
@@ -90,8 +95,8 @@ endfunction()
 ###############################################################################
 
 # NOTE: update executable name in .github/workflows/cmake.yml:25 when changing name here
-add_executable(${PROJECT_NAME} main.cpp
-)
+
+add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
 ###############################################################################
 
