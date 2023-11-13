@@ -12,7 +12,7 @@ class Player {
 public:
     explicit Player(std::string initial_name = "Unknown", int initial_credits = 1000, Role player_role = Role::Player, int player_score = 0);
     Player& operator=(const Player& other);
-    ~Player() = default;
+    virtual ~Player() = default;
 
     [[nodiscard]] int getCredits() const;
     void setCredits(const int& new_credits);
@@ -33,7 +33,7 @@ public:
 
 private:
     std::string name;
-    [[maybe_unused]] int credits;
+    int credits;
     Role role;
     int score;
 };
