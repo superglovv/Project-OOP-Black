@@ -1,7 +1,9 @@
 #include "game.h"
 
 int main() {
-    startGame();
+    std::vector<Player> players(2);
+    Game game(players);
 
+    game.startGame();
     return 0;
 }
