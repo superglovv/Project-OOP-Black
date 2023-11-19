@@ -19,7 +19,9 @@ public:
 
     ~Game() = default;
 
-    void gamePlay() {
+    void gamePlay(int nr) {
+        std::cout << "\nRound " << nr << " begins:" << std::endl;
+
         Deck deck;
         deck.shuffle();
 
@@ -30,61 +32,48 @@ public:
         Role random_role1 = (role_dist(gen) == 0) ? Role::Player : Role::Dealer;
         Role random_role2 = (random_role1 == Role::Player) ? Role::Dealer : Role::Player;
 
-
         players[0].setRole(random_role1);
         players[1].setRole(random_role2);
 
-
-        players[0].setScore(0);
-        players[1].setScore(0);
-
-        std::cout << "\n" << players[0].getName() << "'s Info:" << std::endl;
-        std::cout << players[0];
-
-        std::cout << "\n" << players[1].getName() << "'s Info:" << std::endl;
-        std::cout << players[1];
-
-        std::cout << std::endl;
-
-        std::cout << players[0].getName() << " gets: ";
         Card card = deck.deal();
-        std::cout << " " << card <<  std::endl;
-        if ((card.getRankValue() + 2) > 10){
-            if ((card.getRankValue() + 2) == 14){
-                if ((players[0].getScore()+11) <= 21){
-                    players[0].setScore(players[0].getScore() + 1);
-                } else {
-                    if ((players[0].getScore()+1) <= 21){
-                        players[0].setScore(players[0].getScore() - 9);
-                    }
-                }
 
-            }players[0].setScore(players[0].getScore() + 10);
+        for (int k=0; k<=3; k++){
+            players[k].setScore(0);
 
-        } else players[0].setScore(players[0].getScore() + card.getRankValue() + 2);
-        std::cout << players[0].getName() << " got the score: " << players[0].getScore() << std::endl;
+            if (k<2){
+                std::cout << "\n" << players[k].getName() << "'s Info:" << std::endl;
+                std::cout << players[k];
+            }
 
-        std::cout << players[1].getName() << " gets: ";
-        card = deck.deal();
-        std::cout << " " << card <<  std::endl;
-        if ((card.getRankValue() + 2) > 10){
-            if ((card.getRankValue() + 2) == 14){
-                if ((players[1].getScore()+11) <= 21){
-                    players[1].setScore(players[1].getScore() + 1);
-                } else {
-                    if ((players[1].getScore()+1) <= 21){
-                        players[1].setScore(players[1].getScore() - 9);
-                    }
-                }
+            if (k==1) std::cout << std::endl;
 
-            }players[1].setScore(players[1].getScore() + 10);
+            if (k>1){
+                std::cout << players[k-2].getName() << " gets: ";
+                std::cout << " " << card <<  std::endl;
+                if ((card.getRankValue() + 2) > 10){
+                    if ((card.getRankValue() + 2) == 14){
+                        if ((players[k-2].getScore()+11) <= 21){
+                            players[k-2].setScore(players[k-2].getScore() + 1);
+                        } else {
+                            if ((players[k-2].getScore()+1) <= 21){
+                                players[k-2].setScore(players[k-2].getScore() - 9);
+                            }
+                        }
 
-        } else players[1].setScore(players[1].getScore() + card.getRankValue() + 2);
-        std::cout << players[1].getName() << " got the score: " << players[1].getScore() << std::endl;
+                    }players[k-2].setScore(players[k-2].getScore() + 10);
+
+                } else players[k-2].setScore(players[k-2].getScore() + card.getRankValue() + 2);
+                std::cout << players[k-2].getName() << " got the score: " << players[k-2].getScore() << std::endl;
+                card = deck.deal();
+            }
+
+        }
+
         int playerStands = 0; bool ended = false;
         int hasBet = 0;
         std::vector<int> totalBet(2);
         totalBet[0] = totalBet[1] = 50;
+
         for (int player = 1; player <= 2; player++) {
             bool playerHasStayed = false;
 
@@ -111,10 +100,6 @@ public:
                     std::cout << players[i].getName() << ", your total bet is: " << totalBet[i] << std::endl;
                 }hasBet++;
             }
-
-
-            std::cout << '\n' << totalBet[0] << ", " << totalBet[1] << '\n';
-            std::cout << '\n';
 
             while (!playerHasStayed && !ended) {
                 std::cout << players[player-1].getName() << ", choose 'hit' (0) or 'stay' (1): ";
@@ -146,23 +131,7 @@ public:
                             playerHasStayed = true;
                         }
 
-
-                        if(players[0].getScore() > 21 && players[1].getScore() <= 21 ){
-                            std::cout << "\n!!! The winner is: " << players[1].getName() << " #1" << std::endl;
-                            players[0].setCredits(players[0].getCredits()-totalBet[0]);
-                            players[1].setCredits(players[1].getCredits()+totalBet[0]);
-                            ended = true;
-                        }else{
-                            if(players[1].getScore() > 21 && players[0].getScore() <= 21){
-                                std::cout << "\n!!! The winner is: " << players[0].getName() << "#2" << std::endl;
-                                players[0].setCredits(players[0].getCredits()+totalBet[1]);
-                                players[1].setCredits(players[1].getCredits()-totalBet[1]);
-                                ended = true;
-                            }
-                        }
-
-
-
+                        determineWinner1(ended, totalBet);
                         break;
                     case Stand:
                         std::cout << players[player-1].getName() << " chose to stay." << std::endl;
@@ -177,43 +146,64 @@ public:
         }
         std::cout << '\n' << totalBet[0] << ", " << totalBet[1] << '\n';
 
-
-        if(players[1].getScore() < 21 && players[0].getScore() <21 && players[1].getScore()>players[0].getScore() && playerStands > 0 && !ended){
-            std::cout << "\n!!! The winner is: " << players[1].getName() << " #3" << std::endl;
-            players[0].setCredits(players[0].getCredits()-totalBet[0]);
-            players[1].setCredits(players[1].getCredits()+totalBet[0]);
-        }else if(players[1].getScore() < 21 && players[0].getScore() <21 && players[1].getScore()<players[0].getScore() && playerStands > 0 && !ended){
-            std::cout << "\n!!! The winner is: " << players[0].getName() << " #4" << std::endl;
-            players[0].setCredits(players[0].getCredits()+totalBet[1]);
-            players[1].setCredits(players[1].getCredits()-totalBet[1]);
-        }else if(players[1].reachedTarget() && players[0].reachedTarget() && players[1].getRole() == Role::Dealer){
-            std::cout << "\n!!! The winner is: " << players[1].getName() << " #5" << std::endl;
-            players[0].setCredits(players[0].getCredits()-totalBet[0]);
-            players[1].setCredits(players[1].getCredits()+totalBet[0]);
-        }else if(players[1].reachedTarget() && players[0].reachedTarget() && players[1].getRole() == Role::Dealer && !ended){
-            std::cout << "\n!!! The winner is: " << players[0].getName() << " #6" << std::endl;
-            players[0].setCredits(players[0].getCredits()+totalBet[1]);
-            players[1].setCredits(players[1].getCredits()-totalBet[1]);
-        }else if(players[1].reachedTarget() && playerStands >= 1){
-            std::cout << "\n!!! The winner is: " << players[1].getName() << " #7" << std::endl;
-            players[0].setCredits(players[0].getCredits()-totalBet[0]);
-            players[1].setCredits(players[1].getCredits()+totalBet[0]);
-        } else if(players[0].reachedTarget() && playerStands >= 1){
-            std::cout << "\n!!! The winner is: " << players[0].getName() << " #8" << std::endl;
-            players[0].setCredits(players[0].getCredits()+totalBet[1]);
-            players[1].setCredits(players[1].getCredits()-totalBet[1]);
-        }
-        if(players[1].getScore() == players[0].getScore() && playerStands > 0) std::cout << "Draw!" <<std::endl;
+        determineWinner2(ended, totalBet, playerStands);
         std::cout << "\nThe match has ended!" << std::endl;
 
-        std::cout << '\n' << totalBet[0] << ", " << totalBet[1] << '\n';
-        std::cout << "\n" << players[0].getName() << "'s Info:" << std::endl;
-        std::cout << players[0];
+        for (int k=0; k<=1; k++){
+            std::cout << "\n" << players[k].getName() << "'s Info:" << std::endl;
+            std::cout << players[k];
+        }
 
-        std::cout << "\n" << players[1].getName() << "'s Info:" << std::endl;
-        std::cout << players[1];
+    }
 
+    void handleWinner(int winnerIndex, const std::vector<int>& totalBet, bool& ended) {
+        std::cout << "\n!!! The winner is: " << players[winnerIndex].getName() << std::endl;
 
+        if (winnerIndex == 0) {
+            players[0].setCredits(players[0].getCredits() + totalBet[1]);
+            players[1].setCredits(players[1].getCredits() - totalBet[1]);
+        } else {
+            players[0].setCredits(players[0].getCredits() - totalBet[0]);
+            players[1].setCredits(players[1].getCredits() + totalBet[0]);
+        }
+
+        ended = true;
+    }
+
+    void determineWinner1(bool& ended, const std::vector<int>& totalBet) {
+        if (players[0].getScore() > 21 && players[1].getScore() <= 21) {
+            handleWinner(1, totalBet, ended);
+        } else if (players[1].getScore() > 21 && players[0].getScore() <= 21) {
+            handleWinner(0, totalBet, ended);
+        }
+    }
+
+    void determineWinner2(bool& ended, const std::vector<int>& totalBet, int playerStands) {
+        if (playerStands <= 0 || ended) {
+            return;
+        }
+
+        if (players[1].getScore() < 21 && players[0].getScore() < 21) {
+            if (players[1].getScore() > players[0].getScore()) {
+                handleWinner(1, totalBet, ended);
+            } else if (players[1].getScore() < players[0].getScore()) {
+                handleWinner(0, totalBet, ended);
+            } else {
+                std::cout << "Draw!" << std::endl;
+            }
+        } else if (players[1].reachedTarget()) {
+            if (players[1].getRole() == Role::Dealer) {
+                handleWinner(1, totalBet, ended);
+            } else {
+                std::cout << "Draw!" << std::endl;
+            }
+        } else if (players[0].reachedTarget()) {
+            if (players[1].getRole() == Role::Dealer) {
+                handleWinner(0, totalBet, ended);
+            } else {
+                std::cout << "Draw!" << std::endl;
+            }
+        }
     }
 
     void startGame(){
@@ -228,8 +218,9 @@ public:
 
         players[0].setupPlayer();
         players[1].setupPlayer();
+
         int nr = 1;
-        gamePlay();
+        gamePlay(nr);
 
         while (!hasStopped){
             nr++;
@@ -239,7 +230,7 @@ public:
             switch (static_cast<Choices>(choice2)){
                 case Hit:
                     std::cout << "\nRound " << nr << " begins: " << std::endl;
-                    gamePlay();
+                    gamePlay(nr);
                     break;
                 case Stand:
                     hasStopped = true;
