@@ -30,4 +30,3 @@ Card Deck::deal() {
         return {Card::Rank::Two, Card::Suit::Hearts};
     }
 }
-

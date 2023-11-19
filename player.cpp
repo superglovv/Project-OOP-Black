@@ -62,4 +62,3 @@ std::ostream& operator<<(std::ostream& os, const Player& player) {
 
 void Player::display() const {}
 
-
