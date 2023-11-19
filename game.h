@@ -37,35 +37,32 @@ public:
 
         Card card = deck.deal();
 
-        for (int k=0; k<=3; k++){
+        for  (int k=0; k<=1; k++){
             players[k].setScore(0);
 
-            if (k<2){
-                std::cout << "\n" << players[k].getName() << "'s Info:" << std::endl;
-                std::cout << players[k];
-            }
+            std::cout << "\n" << players[k].getName() << "'s Info:" << std::endl;
+            std::cout << players[k];
 
-            if (k==1) std::cout << std::endl;
+        } std::cout << std::endl;
 
-            if (k>1){
-                std::cout << players[k-2].getName() << " gets: ";
+        for (int k=0; k<=1; k++){
+                std::cout << players[k].getName() << " gets: ";
                 std::cout << " " << card <<  std::endl;
                 if ((card.getRankValue() + 2) > 10){
                     if ((card.getRankValue() + 2) == 14){
-                        if ((players[k-2].getScore()+11) <= 21){
-                            players[k-2].setScore(players[k-2].getScore() + 1);
+                        if ((players[k].getScore()+11) <= 21){
+                            players[k].setScore(players[k].getScore() + 1);
                         } else {
-                            if ((players[k-2].getScore()+1) <= 21){
-                                players[k-2].setScore(players[k-2].getScore() - 9);
+                            if ((players[k].getScore()+1) <= 21){
+                                players[k].setScore(players[k].getScore() - 9);
                             }
                         }
 
-                    }players[k-2].setScore(players[k-2].getScore() + 10);
+                    }players[k].setScore(players[k].getScore() + 10);
 
-                } else players[k-2].setScore(players[k-2].getScore() + card.getRankValue() + 2);
-                std::cout << players[k-2].getName() << " got the score: " << players[k-2].getScore() << std::endl;
+                } else players[k].setScore(players[k].getScore() + card.getRankValue() + 2);
+                std::cout << players[k].getName() << " got the score: " << players[k].getScore() << std::endl;
                 card = deck.deal();
-            }
 
         }
 
