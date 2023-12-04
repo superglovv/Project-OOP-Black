@@ -59,6 +59,6 @@ std::ostream& operator<<(std::ostream& os, const Player& player) {
     os << "Credits: " << player.credits << std::endl;
     return os;
 }
-
-void Player::display() const {}
+//
+//void Player::display() const {}
 

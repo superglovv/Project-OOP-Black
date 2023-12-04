@@ -31,8 +31,8 @@ public:
     [[nodiscard]] std::string getName() const;
     [[nodiscard]] Role getRole() const;
     void setRole(Role new_role);
-
-    virtual void display() const;
+//
+//    virtual void display() const;
 
     friend std::ostream& operator<<(std::ostream& os, const Player& player);
 
@@ -113,10 +113,10 @@ public:
 //        }
 //    }
 //
-////    void display() const override {
-////        std::cout << "I AM " << name << "\n";
-////        std::cout << credits << "\n";
-////        std::cout << roleToString(role) << "\n";
-////        std::cout << score << "\n";
-////    }
+//    void display() const override {
+//        std::cout << "I AM " << name << "\n";
+//        std::cout << credits << "\n";
+//        std::cout << roleToString(role) << "\n";
+//        std::cout << score << "\n";
+//    }
 };
