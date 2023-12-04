@@ -212,15 +212,15 @@ public:
 
         std::unique_ptr<Player> originalPlayer = std::make_unique<Dealer>("John", 20000);
         std::unique_ptr<Player> clonedPlayer = originalPlayer->clone();
-        clonedPlayer->display();
+        std::cout << *clonedPlayer << "\n";
 
         std::unique_ptr<Player> originalPlayer1 = std::make_unique<Bot>("Bravo", 3000000);
         std::unique_ptr<Player> clonedPlayer1 = originalPlayer1->clone();
-        clonedPlayer1->display();
+        std::cout << *clonedPlayer1 << "\n";
 
         std::unique_ptr<Player> originalPlayer2 = std::make_unique<Human>("Gion", 100000);
         std::unique_ptr<Player> clonedPlayer2 = originalPlayer2->clone();
-        clonedPlayer2->display();
+        std::cout << *clonedPlayer2 << "\n";
 
         players[0].setupPlayer();
         players[1].setupPlayer();
