@@ -46,12 +46,12 @@ private:
 class Dealer : public Player {
 private:
     std::string name;
-    int credits;
-    Role role;
-    int score;
+    int credits{};
+    Role role{};
+    int score{};
 public:
     explicit Dealer(std::string initial_name = "Dealer", int initial_credits = 1000, Role player_role = Role::Dealer, int player_score = 0)
-            : name(std::move(initial_name)), credits(initial_credits), role(player_role), score(player_score) {}
+            : Player(std::move(initial_name), initial_credits, player_role, player_score) {}
 
     [[nodiscard]] std::unique_ptr<Player> clone() const override {
         return std::make_unique<Dealer>(*this);
@@ -66,23 +66,23 @@ public:
         }
     }
 
-    void display() const override {
-        std::cout << "I AM " << name << ", THE DEALER (SHADY NOISES)\n";
-        std::cout << credits << "\n";
-        std::cout << roleToString(role) << "\n";
-        std::cout << score << "\n";
-    }
+//    void display() const override {
+//        std::cout << "I AM " << name << ", THE DEALER (SHADY NOISES)\n";
+//        std::cout << credits << "\n";
+//        std::cout << roleToString(role) << "\n";
+//        std::cout << score << "\n";
+//    }
 };
 
 class Bot : public Player {
 private:
     std::string name;
-    int credits;
-    Role role;
-    int score;
+    int credits{};
+    Role role{};
+    int score{};
 public:
     explicit Bot(std::string initial_name = "Bot", int initial_credits = 1000, Role player_role = Role::Player, int player_score = 0)
-    : name(std::move(initial_name)), credits(initial_credits), role(player_role), score(player_score) {}
+    : Player(std::move(initial_name), initial_credits, player_role, player_score) {}
 
     [[nodiscard]] std::unique_ptr<Player> clone() const override {
         return std::make_unique<Bot>(*this);
@@ -97,23 +97,23 @@ public:
         }
     }
 
-    void display() const override {
-        std::cout << "I AM " << name << ", THE BOT WITH LOTS OF MONEY\n";
-        std::cout << credits << "\n";
-        std::cout << roleToString(role) << "\n";
-        std::cout << score << "\n";
-    }
+//    void display() const override {
+//        std::cout << "I AM " << name << ", THE BOT WITH LOTS OF MONEY\n";
+//        std::cout << credits << "\n";
+//        std::cout << roleToString(role) << "\n";
+//        std::cout << score << "\n";
+//    }
 };
 
 class Human : public Player {
 private:
     std::string name;
-    int credits;
-    Role role;
-    int score;
+    int credits{};
+    Role role{};
+    int score{};
 public:
     explicit Human(std::string initial_name = "Human", int initial_credits = 1000, Role player_role = Role::Player, int player_score = 0)
-    : name(std::move(initial_name)), credits(initial_credits), role(player_role), score(player_score) {}
+    : Player(std::move(initial_name), initial_credits, player_role, player_score) {}
 
     [[nodiscard]] std::unique_ptr<Player> clone() const override {
         return std::make_unique<Human>(*this);
@@ -128,10 +128,10 @@ public:
         }
     }
 
-    void display() const override {
-        std::cout << "I AM " << name << "\n";
-        std::cout << credits << "\n";
-        std::cout << roleToString(role) << "\n";
-        std::cout << score << "\n";
-    }
+//    void display() const override {
+//        std::cout << "I AM " << name << "\n";
+//        std::cout << credits << "\n";
+//        std::cout << roleToString(role) << "\n";
+//        std::cout << score << "\n";
+//    }
 };
