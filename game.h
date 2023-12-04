@@ -5,6 +5,7 @@
 #include <random>
 #include "player.h"
 #include "deck.h"
+#include <memory>
 
 enum Choices {
     Hit,
@@ -209,9 +210,17 @@ public:
         Bot bot;
         Human human;
 
-        dealer.display();
-        bot.display();
-        human.display();
+        std::unique_ptr<Player> originalPlayer = std::make_unique<Dealer>("John", 20000);
+        std::unique_ptr<Player> clonedPlayer = originalPlayer->clone();
+        clonedPlayer->display();
+
+        std::unique_ptr<Player> originalPlayer1 = std::make_unique<Bot>("Bravo", 3000000);
+        std::unique_ptr<Player> clonedPlayer1 = originalPlayer1->clone();
+        clonedPlayer1->display();
+
+        std::unique_ptr<Player> originalPlayer2 = std::make_unique<Human>("Gion", 100000);
+        std::unique_ptr<Player> clonedPlayer2 = originalPlayer2->clone();
+        clonedPlayer2->display();
 
         players[0].setupPlayer();
         players[1].setupPlayer();

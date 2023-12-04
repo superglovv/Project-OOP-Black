@@ -5,6 +5,7 @@
 #include <vector>
 #include <algorithm>
 #include <random>
+#include <memory>
 
 enum class Role { Player, Dealer };
 
@@ -13,6 +14,10 @@ public:
     explicit Player(std::string initial_name = "Unknown", int initial_credits = 1000, Role player_role = Role::Player, int player_score = 0);
     Player& operator=(const Player& other);
     virtual ~Player() = default;
+
+    [[nodiscard]] virtual std::unique_ptr<Player> clone() const {
+        return std::make_unique<Player>(*this);
+    }
 
     [[nodiscard]] int getCredits() const;
     void setCredits(const int& new_credits);
@@ -39,31 +44,94 @@ private:
 };
 
 class Dealer : public Player {
+private:
+    std::string name;
+    int credits;
+    Role role;
+    int score;
 public:
-    explicit Dealer(std::string initial_name = "Dealer", int initial_credits = 10000)
-            : Player(std::move(initial_name), initial_credits, Role::Dealer) {}
+    explicit Dealer(std::string initial_name = "Dealer", int initial_credits = 1000, Role player_role = Role::Dealer, int player_score = 0)
+            : name(std::move(initial_name)), credits(initial_credits), role(player_role), score(player_score) {}
+
+    [[nodiscard]] std::unique_ptr<Player> clone() const override {
+        return std::make_unique<Dealer>(*this);
+    }
+
+    static std::string roleToString(Role role) {
+        switch (role) {
+            case Role::Player:
+                return "Player";
+            case Role::Dealer:
+                return "Dealer";
+        }
+    }
 
     void display() const override {
-        std::cout << "I AM DEALER\n";
+        std::cout << "I AM " << name << ", THE DEALER (SHADY NOISES)\n";
+        std::cout << credits << "\n";
+        std::cout << roleToString(role) << "\n";
+        std::cout << score << "\n";
     }
 };
 
 class Bot : public Player {
+private:
+    std::string name;
+    int credits;
+    Role role;
+    int score;
 public:
-    explicit Bot(std::string initial_name = "Bot", int initial_credits = 500)
-            : Player(std::move(initial_name), initial_credits, Role::Player) {}
+    explicit Bot(std::string initial_name = "Bot", int initial_credits = 1000, Role player_role = Role::Player, int player_score = 0)
+    : name(std::move(initial_name)), credits(initial_credits), role(player_role), score(player_score) {}
+
+    [[nodiscard]] std::unique_ptr<Player> clone() const override {
+        return std::make_unique<Bot>(*this);
+    }
+
+    static std::string roleToString(Role role) {
+        switch (role) {
+            case Role::Player:
+                return "Player";
+            case Role::Dealer:
+                return "Dealer";
+        }
+    }
 
     void display() const override {
-        std::cout << "I AM BOT\n";
+        std::cout << "I AM " << name << ", THE BOT WITH LOTS OF MONEY\n";
+        std::cout << credits << "\n";
+        std::cout << roleToString(role) << "\n";
+        std::cout << score << "\n";
     }
 };
 
 class Human : public Player {
+private:
+    std::string name;
+    int credits;
+    Role role;
+    int score;
 public:
-    explicit Human(std::string initial_name = "Human", int initial_credits = 1000)
-            : Player(std::move(initial_name), initial_credits, Role::Player) {}
+    explicit Human(std::string initial_name = "Human", int initial_credits = 1000, Role player_role = Role::Player, int player_score = 0)
+    : name(std::move(initial_name)), credits(initial_credits), role(player_role), score(player_score) {}
+
+    [[nodiscard]] std::unique_ptr<Player> clone() const override {
+        return std::make_unique<Human>(*this);
+    }
+
+    static std::string roleToString(Role role) {
+        switch (role) {
+            case Role::Player:
+                return "Player";
+            case Role::Dealer:
+                return "Dealer";
+        }
+    }
 
     void display() const override {
-        std::cout << "I AM HUMAN\n";
+        std::cout << "I AM " << name << "\n";
+        std::cout << credits << "\n";
+        std::cout << roleToString(role) << "\n";
+        std::cout << score << "\n";
     }
 };
