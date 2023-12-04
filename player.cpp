@@ -3,15 +3,15 @@
 Player::Player(std::string initial_name, int initial_credits, Role player_role, int player_score)
         : name(std::move(initial_name)), credits(initial_credits), role(player_role), score(player_score) {}
 
-Player& Player::operator=(const Player& other) {
-    if (this != &other) {
-        name = other.name;
-        credits = other.credits;
-        role = other.role;
-        score = other.score;
-    }
-    return *this;
-}
+//Player& Player::operator=(const Player& other) {
+//    if (this != &other) {
+//        name = other.name;
+//        credits = other.credits;
+//        role = other.role;
+//        score = other.score;
+//    }
+//    return *this;
+//}
 
 int Player::getCredits() const {
     return credits;

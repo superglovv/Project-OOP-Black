@@ -12,7 +12,7 @@ enum class Role { Player, Dealer };
 class Player {
 public:
     explicit Player(std::string initial_name = "Unknown", int initial_credits = 1000, Role player_role = Role::Player, int player_score = 0);
-    Player& operator=(const Player& other);
+//    Player& operator=(const Player& other);
     virtual ~Player() = default;
 
     [[nodiscard]] virtual std::unique_ptr<Player> clone() const {
