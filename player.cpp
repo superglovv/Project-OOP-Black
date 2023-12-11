@@ -29,9 +29,9 @@ int Player::reachedTarget() const {
     return (score == 21) ? 1 : 0;
 }
 
-void Player::setupPlayer() {
+void Player::setupPlayer(int pnr) {
     std::string name_insert;
-    std::cout << "Player's name: ";
+    std::cout << "\nPlayer " << pnr << "'s name: ";
     std::cin >> name_insert;
     name = name_insert;
 }

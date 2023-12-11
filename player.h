@@ -15,8 +15,8 @@ public:
 //    Player& operator=(const Player& other);
     virtual ~Player() = default;
 
-    [[nodiscard]] virtual std::unique_ptr<Player> clone() const {
-        return std::make_unique<Player>(*this);
+    [[maybe_unused]] [[nodiscard]] virtual std::shared_ptr<Player> clone() const {
+        return std::make_shared<Player>(*this);
     }
 
     [[nodiscard]] int getCredits() const;
@@ -25,12 +25,18 @@ public:
     [[nodiscard]] int getScore() const;
     [[nodiscard]] int reachedTarget() const;
 
-    void setupPlayer();
+    void setupPlayer(int pnr);
     void setScore(const int& new_score);
 
     [[nodiscard]] std::string getName() const;
     [[nodiscard]] Role getRole() const;
     void setRole(Role new_role);
+
+//    virtual int makeMove(int choice){
+//        std::cin >> choice;
+//        return choice;
+//    };
+
 //
 //    virtual void display() const;
 
@@ -48,8 +54,8 @@ public:
     explicit Dealer(std::string initial_name = "Dealer", int initial_credits = 1000, Role player_role = Role::Dealer, int player_score = 0)
             : Player(std::move(initial_name), initial_credits, player_role, player_score) {}
 
-    [[nodiscard]] std::unique_ptr<Player> clone() const override {
-        return std::make_unique<Dealer>(*this);
+    [[nodiscard]] std::shared_ptr<Player> clone() const override {
+        return std::make_shared<Dealer>(*this);
     }
 //
 //    static std::string roleToString(Role role) {
@@ -69,14 +75,25 @@ public:
 //    }
 };
 
-class Bot : public Player {
+class CrazyBot : public Player {
 public:
-    explicit Bot(std::string initial_name = "Bot", int initial_credits = 1000, Role player_role = Role::Player, int player_score = 0)
+    explicit CrazyBot(std::string initial_name = "Unknown CrazyBot", int initial_credits = 1000, Role player_role = Role::Player, int player_score = 0)
     : Player(std::move(initial_name), initial_credits, player_role, player_score) {}
 
-    [[nodiscard]] std::unique_ptr<Player> clone() const override {
-        return std::make_unique<Bot>(*this);
+    [[nodiscard]] std::shared_ptr<Player> clone() const override {
+        return std::make_shared<CrazyBot>(*this);
     }
+
+    static int randomMove(int &choice) {
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<int> distribution(0, 1);
+
+        choice = distribution(gen);
+
+        return choice;
+    }
+
 //
 //    static std::string roleToString(Role role) {
 //        switch (role) {
@@ -100,8 +117,8 @@ public:
     explicit Human(std::string initial_name = "Human", int initial_credits = 1000, Role player_role = Role::Player, int player_score = 0)
     : Player(std::move(initial_name), initial_credits, player_role, player_score) {}
 
-    [[nodiscard]] std::unique_ptr<Player> clone() const override {
-        return std::make_unique<Human>(*this);
+    [[nodiscard]] std::shared_ptr<Player> clone() const override {
+        return std::make_shared<Human>(*this);
     }
 
 //    static std::string roleToString(Role role) {
