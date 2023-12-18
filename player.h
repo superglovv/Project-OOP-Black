@@ -10,9 +10,14 @@
 enum class Role { Player, Dealer };
 
 class Player {
+protected:
+    Player(std::string initial_name, int initial_credits, Role player_role, int player_score)
+            : name(std::move(initial_name)), credits(initial_credits), role(player_role), score(player_score) {}
 public:
-    explicit Player(std::string initial_name = "Unknown", int initial_credits = 1000, Role player_role = Role::Player, int player_score = 0);
-//    Player& operator=(const Player& other);
+    explicit Player(std::string initial_name = "Unknown", int initial_credits = 1000, int player_score = 0)
+            : Player(std::move(initial_name), initial_credits, Role::Player, player_score) {}
+
+    //    Player& operator=(const Player& other);
     virtual ~Player() = default;
 
     [[maybe_unused]] [[nodiscard]] virtual std::shared_ptr<Player> clone() const {
@@ -53,8 +58,8 @@ private:
 
 class Dealer : public Player {
 public:
-    explicit Dealer(std::string initial_name = "Dealer", int initial_credits = 1000, Role player_role = Role::Dealer, int player_score = 0)
-            : Player(std::move(initial_name), initial_credits, player_role, player_score) {}
+    explicit Dealer(std::string initial_name = "Dealer", int initial_credits = 1000, int player_score = 0)
+            : Player(std::move(initial_name), initial_credits, Role::Dealer, player_score) {}
 
     [[nodiscard]] std::shared_ptr<Player> clone() const override {
         return std::make_shared<Dealer>(*this);
@@ -67,8 +72,8 @@ private:
     void makeBet(int &bettingChoice, int &betAmount) override;
 
 public:
-    explicit CrazyBot(std::string initial_name = "Unknown CrazyBot", int initial_credits = 1000, Role player_role = Role::Player, int player_score = 0)
-    : Player(std::move(initial_name), initial_credits, player_role, player_score) {}
+    explicit CrazyBot(std::string initial_name = "Unknown CrazyBot", int initial_credits = 1000, int player_score = 0)
+            : Player(std::move(initial_name), initial_credits, Role::Player, player_score) {}
 
     [[nodiscard]] std::shared_ptr<Player> clone() const override {
         return std::make_shared<CrazyBot>(*this);
@@ -88,7 +93,7 @@ public:
 class Human : public Player {
 public:
     explicit Human(std::string initial_name = "Human", int initial_credits = 1000, Role player_role = Role::Player, int player_score = 0)
-    : Player(std::move(initial_name), initial_credits, player_role, player_score) {}
+            : Player(std::move(initial_name), initial_credits, player_role, player_score) {}
 
     [[nodiscard]] std::shared_ptr<Player> clone() const override {
         return std::make_shared<Human>(*this);

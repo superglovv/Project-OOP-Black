@@ -234,11 +234,11 @@ void Game::startGame(int mode) {
                         if (dynamic_cast<Dealer*>(player.get()) != nullptr) {
                             std::cout << "Found a Dealer: " << player->getName() << ", Converting to Player." << std::endl;
 
-                            player = std::make_shared<Player>(player->getName(), player->getCredits(), Role::Player, player->getScore());
+                            player = std::make_shared<Player>(player->getName(), player->getCredits(), player->getScore());
                         } else if (dynamic_cast<Player*>(player.get()) != nullptr) {
                             std::cout << "Found a Player: " << player->getName() << ", Converting to Dealer." << std::endl;
 
-                            player = std::make_shared<Dealer>(player->getName(), player->getCredits(), Role::Dealer, player->getScore());
+                            player = std::make_shared<Dealer>(player->getName(), player->getCredits(), player->getScore());
                         }
                     }
                 }
