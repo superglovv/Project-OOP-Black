@@ -32,13 +32,15 @@ public:
     [[nodiscard]] Role getRole() const;
     void setRole(Role new_role);
 
-//    virtual int makeMove(int choice){
-//        std::cin >> choice;
-//        return choice;
-//    };
+    virtual int makeMove(int &choice){
+        std::cin >> choice;
+        return choice;
+    };
 
-//
-//    virtual void display() const;
+    virtual void makeBet(int &bettingChoice, int &betAmount){
+        std::cin >> bettingChoice;
+        betAmount = 0;
+    };
 
     friend std::ostream& operator<<(std::ostream& os, const Player& player);
 
@@ -57,22 +59,6 @@ public:
     [[nodiscard]] std::shared_ptr<Player> clone() const override {
         return std::make_shared<Dealer>(*this);
     }
-//
-//    static std::string roleToString(Role role) {
-//        switch (role) {
-//            case Role::Player:
-//                return "Player";
-//            case Role::Dealer:
-//                return "Dealer";
-//        }
-//    }
-//
-//    void display() const override {
-//        std::cout << "I AM " << name << ", THE DEALER (SHADY NOISES)\n";
-//        std::cout << credits << "\n";
-//        std::cout << roleToString(role) << "\n";
-//        std::cout << score << "\n";
-//    }
 };
 
 class CrazyBot : public Player {
@@ -94,22 +80,14 @@ public:
         return choice;
     }
 
-//
-//    static std::string roleToString(Role role) {
-//        switch (role) {
-//            case Role::Player:
-//                return "Player";
-//            case Role::Dealer:
-//                return "Dealer";
-//        }
-//    }
-//
-//    void display() const override {
-//        std::cout << "I AM " << name << ", THE BOT WITH LOTS OF MONEY\n";
-//        std::cout << credits << "\n";
-//        std::cout << roleToString(role) << "\n";
-//        std::cout << score << "\n";
-//    }
+    int makeMove(int &choice) override {
+        return randomMove(choice);
+    }
+
+    void makeBet(int &bettingChoice, int &betAmount) override{
+        bettingChoice = 0;
+        betAmount = 200;
+    };
 };
 
 class Human : public Player {
@@ -120,20 +98,4 @@ public:
     [[nodiscard]] std::shared_ptr<Player> clone() const override {
         return std::make_shared<Human>(*this);
     }
-
-//    static std::string roleToString(Role role) {
-//        switch (role) {
-//            case Role::Player:
-//                return "Player";
-//            case Role::Dealer:
-//                return "Dealer";
-//        }
-//    }
-//
-//    void display() const override {
-//        std::cout << "I AM " << name << "\n";
-//        std::cout << credits << "\n";
-//        std::cout << roleToString(role) << "\n";
-//        std::cout << score << "\n";
-//    }
 };

@@ -20,23 +20,32 @@ public:
 
     ~Game() = default;
 
-    void gamePlay() {
+    void gamePlay(int mode) {
         Deck deck;
         deck.shuffle();
 
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        std::uniform_int_distribution<int> role_dist(0, 1);
+        if (mode == 0){
+            std::random_device rd;
+            std::mt19937 gen(rd());
+            std::uniform_int_distribution<int> role_dist(0, 1);
 
-        Role random_role1 = (role_dist(gen) == 0) ? Role::Player : Role::Dealer;
-        Role random_role2 = (random_role1 == Role::Player) ? Role::Dealer : Role::Player;
+            Role random_role1 = (role_dist(gen) == 0) ? Role::Player : Role::Dealer;
+            Role random_role2 = (random_role1 == Role::Player) ? Role::Dealer : Role::Player;
 
 
-        players[0]->setRole(random_role1);
-        players[1]->setRole(random_role2);
-
+            players[0]->setRole(random_role1);
+            players[1]->setRole(random_role2);
+        }
 
         Card card = deck.deal();
+//
+//        for (auto& player : players) {
+//            if (dynamic_cast<Dealer*>(player.get()) != nullptr) {
+//                std::cout << "Player: " << player->getName() << ", is Dealer." << std::endl;
+//            } else if (dynamic_cast<Player*>(player.get()) != nullptr) {
+//                std::cout << "Player: " << player->getName() << ", is Player." << std::endl;
+//            }
+//        }
 
         for  (int k=0; k<=1; k++){
             players[k]->setScore(0);
@@ -80,18 +89,27 @@ public:
                     std::cout << "Current player: " << players[i]->getName() << " (choose 'yes' (0) or 'no' (1)): "
                               << std::endl;
                     int bettingChoice;
-                    std::cin >> bettingChoice;
+//                    std::cin >> bettingChoice;
 
                     int betAmount;
+                    players[i]->makeBet(bettingChoice, betAmount);
+
 
                     switch (static_cast<Choices>(bettingChoice)) {
                         case Hit:
-                            std::cout << "How much do you want to bet, " << players[i]->getName()
-                                      << "? Available credits: " << players[i]->getCredits() << std::endl;
-                            std::cin >> betAmount;
-                            totalBet[i] = totalBet[i] + betAmount;
+                            if(dynamic_cast<CrazyBot*>(players[i].get())){
+                                std::cout << "Bet choice: " << betAmount << "? Available credits: " << players[i]->getCredits() << std::endl;
+                                totalBet[i] = totalBet[i] + betAmount;
+                            } else{
+                                std::cout << "How much do you want to bet, " << players[i]->getName()
+                                          << "? Available credits: " << players[i]->getCredits() << std::endl;
+                                std::cin >> betAmount;
+                                totalBet[i] = totalBet[i] + betAmount;
+                            }
+                            std::cout << "(Chose to bet more)" << std::endl;
                             break;
                         case Stand:
+                            std::cout << "(Chose to keep bet)" << std::endl;
                             break;
                     }
                     std::cout << players[i]->getName() << ", your total bet is: " << totalBet[i] << std::endl;
@@ -105,13 +123,7 @@ public:
             while (!playerHasStayed && !ended) {
                 std::cout << players[player-1]->getName() << ", choose 'hit' (0) or 'stay' (1): ";
                 int choice;
-
-                    if (dynamic_cast<CrazyBot*>(players[player-1].get())) {
-                        CrazyBot::randomMove(choice);
-                        std::cout << choice <<"{{}} ";
-                    } else{
-                        std::cin >> choice;
-                    }
+                players[player-1]->makeMove(choice);
 
 
                 switch (static_cast<Choices>(choice)) {
@@ -223,7 +235,7 @@ public:
         } else players[0]->setupPlayer(1);
 
         int nr = 1;
-        gamePlay();
+        gamePlay(mode);
 
         while (!hasStopped){
             nr++;
@@ -233,7 +245,20 @@ public:
             switch (static_cast<Choices>(choice2)){
                 case Hit:
                     std::cout << "\nRound " << nr << " begins: " << std::endl;
-                    gamePlay();
+                    if (mode == 1){
+                        for (auto& player : players) {
+                            if (dynamic_cast<Dealer*>(player.get()) != nullptr) {
+                                std::cout << "Found a Dealer: " << player->getName() << ", Converting to Player." << std::endl;
+
+                                player = std::make_shared<Player>(player->getName(), player->getCredits(), Role::Player, player->getScore());
+                            } else if (dynamic_cast<Player*>(player.get()) != nullptr) {
+                                std::cout << "Found a Player: " << player->getName() << ", Converting to Dealer." << std::endl;
+
+                                player = std::make_shared<Dealer>(player->getName(), player->getCredits(), Role::Dealer, player->getScore());
+                            }
+                        }
+                    }
+                    gamePlay(mode);
                     break;
                 case Stand:
                     hasStopped = true;

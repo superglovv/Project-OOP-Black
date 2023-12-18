@@ -16,11 +16,11 @@ int main() {
     int mode = 1;
     switch (static_cast<Choose>(chooseMode)){
         case Single:
-            players.push_back(std::make_shared<Player>());
+            players.push_back(std::make_shared<Dealer>());
             mode = 0;
             break;
         case Multi:
-            players.push_back(std::make_shared<Player>());
+            players.push_back(std::make_shared<Dealer>());
             players.push_back(std::make_shared<Player>());
             break;
     }
