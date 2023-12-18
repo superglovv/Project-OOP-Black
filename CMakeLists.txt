@@ -23,6 +23,7 @@ set(SOURCE_FILES
         main.cpp
         deck.cpp
         card.cpp
+        game.cpp
         player.cpp
 )
 ###############################################################################

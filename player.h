@@ -62,6 +62,10 @@ public:
 };
 
 class CrazyBot : public Player {
+private:
+    int makeMove(int &choice) override;
+    void makeBet(int &bettingChoice, int &betAmount) override;
+
 public:
     explicit CrazyBot(std::string initial_name = "Unknown CrazyBot", int initial_credits = 1000, Role player_role = Role::Player, int player_score = 0)
     : Player(std::move(initial_name), initial_credits, player_role, player_score) {}
@@ -79,15 +83,6 @@ public:
 
         return choice;
     }
-
-    int makeMove(int &choice) override {
-        return randomMove(choice);
-    }
-
-    void makeBet(int &bettingChoice, int &betAmount) override{
-        bettingChoice = 0;
-        betAmount = 200;
-    };
 };
 
 class Human : public Player {
