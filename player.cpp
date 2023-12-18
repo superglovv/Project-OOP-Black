@@ -54,7 +54,12 @@ int CrazyBot::makeMove(int &choice) {
     return randomMove(choice);
 }
 
-void CrazyBot::makeBet(int &bettingChoice, int &betAmount) {
+void CrazyBot::makeBet(int &bettingChoice, int &betAmount, [[maybe_unused]] int betcase) {
     bettingChoice = 0;
     betAmount = 200;
 }
+
+//int ParanoiaBot::makeMove(int &choice) {
+//    choice = 0;
+//    return choice;
+//}

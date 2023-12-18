@@ -42,9 +42,13 @@ public:
         return choice;
     };
 
-    virtual void makeBet(int &bettingChoice, int &betAmount){
-        std::cin >> bettingChoice;
-        betAmount = 0;
+    virtual void makeBet(int &bettingChoice, int &betAmount, [[maybe_unused]] int betcase){
+        if (betcase == 0){
+            std::cin >> bettingChoice;
+            betAmount = 0;
+        } else {
+            std::cin >> betAmount;
+        }
     };
 
     friend std::ostream& operator<<(std::ostream& os, const Player& player);
@@ -69,7 +73,7 @@ public:
 class CrazyBot : public Player {
 private:
     int makeMove(int &choice) override;
-    void makeBet(int &bettingChoice, int &betAmount) override;
+    void makeBet(int &bettingChoice, int &betAmount, [[maybe_unused]] int betcase) override;
 
 public:
     explicit CrazyBot(std::string initial_name = "Unknown CrazyBot", int initial_credits = 1000, int player_score = 0)
@@ -87,6 +91,20 @@ public:
         choice = distribution(gen);
 
         return choice;
+    }
+};
+
+class ParanoiaBot : public Player {
+private:
+    int makeMove(int &choice) override;
+    void makeBet(int &bettingChoice, int &betAmount, [[maybe_unused]] int betcase) override;
+
+public:
+    explicit ParanoiaBot(std::string initial_name = "Unknown ParanoiaBot", int initial_credits = 1000, int player_score = 0)
+            : Player(std::move(initial_name), initial_credits, Role::Player, player_score) {}
+
+    [[nodiscard]] std::shared_ptr<Player> clone() const override {
+        return std::make_shared<ParanoiaBot>(*this);
     }
 };
 

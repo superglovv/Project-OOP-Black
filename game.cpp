@@ -75,23 +75,20 @@ Game::Game(std::vector<std::shared_ptr<Player>>& players) : players(players) {}
                 std::cout << "Current player: " << players[i]->getName() << " (choose 'yes' (0) or 'no' (1)): "
                           << std::endl;
                 int bettingChoice;
-//                    std::cin >> bettingChoice;
+
+//                if (i==1){
+//                    bettingChoice = 1;
+//                }else std::cin >> bettingChoice;
 
                 int betAmount;
-                players[i]->makeBet(bettingChoice, betAmount);
+                players[i]->makeBet(bettingChoice, betAmount, 0);
 
 
                 switch (static_cast<Choices>(bettingChoice)) {
                     case Hit:
-                        if(dynamic_cast<CrazyBot*>(players[i].get())){
-                            std::cout << "Bet choice: " << betAmount << "? Available credits: " << players[i]->getCredits() << std::endl;
+                            std::cout << "How much do you want to bet: ";
+                            players[i]->makeBet(bettingChoice, betAmount, 1);
                             totalBet[i] = totalBet[i] + betAmount;
-                        } else{
-                            std::cout << "How much do you want to bet, " << players[i]->getName()
-                                      << "? Available credits: " << players[i]->getCredits() << std::endl;
-                            std::cin >> betAmount;
-                            totalBet[i] = totalBet[i] + betAmount;
-                        }
                         std::cout << "(Chose to bet more)" << std::endl;
                         break;
                     case Stand:
