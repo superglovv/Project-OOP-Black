@@ -6,6 +6,8 @@
 #include <algorithm>
 #include <random>
 #include <memory>
+#include "deck.h"
+#include "card.h"
 
 enum class Role { Player, Dealer };
 
@@ -63,6 +65,8 @@ class Dealer : public Player {
 public:
     explicit Dealer(std::string initial_name = "Dealer", int initial_credits = 1000, int player_score = 0)
             : Player(std::move(initial_name), initial_credits, Role::Dealer, player_score) {}
+
+    static Card dealCards();
 
     [[nodiscard]] std::shared_ptr<Player> clone() const override {
         return std::make_shared<Dealer>(*this);
