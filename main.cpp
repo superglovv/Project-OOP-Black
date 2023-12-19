@@ -6,6 +6,11 @@ enum Choose {
     Multi
 };
 
+enum Difficulty {
+    Crazybot = 1,
+    Paranoiabot =2
+};
+
 int main() {
     std::vector<std::shared_ptr<Player>> players;
 
@@ -27,7 +32,17 @@ int main() {
 
 
     if (players.size() < 2){
-        players.push_back(std::make_shared<CrazyBot>("BOT 1"));
+        int chooseDifficulty;
+        std::cout << " Choose difficulty: \n 1) vs Crazy Bot \n 2) vs Paranoia Bot" <<  std::endl;
+        std::cin >> chooseDifficulty;
+        switch (static_cast<Difficulty>(chooseDifficulty)){
+            case Crazybot:
+                players.push_back(std::make_shared<CrazyBot>("BOT 1"));
+                break;
+            case Paranoiabot:
+                players.push_back(std::make_shared<ParanoiaBot>("BOT 2"));
+                break;
+        }
     }
 
     Game game(players);

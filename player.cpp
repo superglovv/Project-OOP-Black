@@ -50,8 +50,8 @@ std::ostream& operator<<(std::ostream& os, const Player& player) {
 //
 //void Player::display() const {}
 
-int CrazyBot::makeMove(int &choice) {
-    return randomMove(choice);
+void CrazyBot::makeMove(int &choice, [[maybe_unused]] int nrMoves) {
+    randomMove(choice);
 }
 
 void CrazyBot::makeBet(int &bettingChoice, int &betAmount, [[maybe_unused]] int betcase) {
@@ -59,7 +59,12 @@ void CrazyBot::makeBet(int &bettingChoice, int &betAmount, [[maybe_unused]] int 
     betAmount = 200;
 }
 
-//int ParanoiaBot::makeMove(int &choice) {
-//    choice = 0;
-//    return choice;
-//}
+void ParanoiaBot::makeMove(int &choice, [[maybe_unused]] int nrMoves) {
+    if(nrMoves < 2) choice=0;
+    else choice=1;
+}
+
+void ParanoiaBot::makeBet(int &bettingChoice, int &betAmount, [[maybe_unused]] int betcase) {
+    bettingChoice = 0;
+    betAmount = 300;
+}

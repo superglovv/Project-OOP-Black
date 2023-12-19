@@ -14,10 +14,7 @@ enum Choices {
 
 Game::Game(std::vector<std::shared_ptr<Player>>& players) : players(players) {}
 
-[[maybe_unused]] void Game::gamePlay(int mode) {
-    Deck deck;
-    deck.shuffle();
-
+void Game::giveRole(int mode) {
     if (mode == 0){
         std::random_device rd;
         std::mt19937 gen(rd());
@@ -30,17 +27,69 @@ Game::Game(std::vector<std::shared_ptr<Player>>& players) : players(players) {}
         players[0]->setRole(random_role1);
         players[1]->setRole(random_role2);
     }
+}
 
-    Card card = deck.deal();
+void Game::resolveRound(int type, const std::vector<int>& totalBet, bool& ended) {
+    if(type == 2){
+        if (players[1]->getScore() < 21 && players[0]->getScore() < 21) {
+            if (players[1]->getScore() > players[0]->getScore()) {
+                handleWinner(1, totalBet, ended);
+            } else if (players[1]->getScore() < players[0]->getScore()) {
+                handleWinner(0, totalBet, ended);
+            } else {
+                std::cout << "Draw!" << std::endl;
+            }
+        } else if (players[1]->reachedTarget()) {
+            if (players[1]->getRole() == Role::Dealer) {
+                handleWinner(1, totalBet, ended);
+            } else {
+                std::cout << "Draw!" << std::endl;
+            }
+        } else if (players[0]->reachedTarget()) {
+            if (players[1]->getRole() == Role::Dealer) {
+                handleWinner(0, totalBet, ended);
+            } else {
+                std::cout << "Draw!" << std::endl;
+            }
+        }
+    } else {
+        if (players[0]->getScore() > 21 && players[1]->getScore() <= 21) {
+            handleWinner(1, totalBet, ended);
+        } else if (players[1]->getScore() > 21 && players[0]->getScore() <= 21) {
+            handleWinner(0, totalBet, ended);
+        }
+    }
+}
 
-    for  (int k=0; k<=1; k++){
-        players[k]->setScore(0);
+void Game::bettingStage(int &hasBet, std::vector<int>& totalBet) {
+    for (int i=0; i<=1; i++) {
+        if (hasBet <= 1) {
+            std::cout << "\nInitial bet: 50 credits; Wanna bet more?" << std::endl;
+            std::cout << "Current player: " << players[i]->getName() << " (choose 'yes' (0) or 'no' (1)): "
+                      << std::endl;
+            int bettingChoice;
 
-        std::cout << "\n" << players[k]->getName() << "'s Info:" << std::endl;
-        std::cout << *players[k];
+            int betAmount;
+            players[i]->makeBet(bettingChoice, betAmount, 0);
 
-    } std::cout << std::endl;
 
+            switch (static_cast<Choices>(bettingChoice)) {
+                case Hit:
+                    std::cout << "How much do you want to bet: ";
+                    players[i]->makeBet(bettingChoice, betAmount, 1);
+                    totalBet[i] = totalBet[i] + betAmount;
+                    std::cout << "(Chose to bet more)" << std::endl;
+                    break;
+                case Stand:
+                    std::cout << "(Chose to keep bet)" << std::endl;
+                    break;
+            }
+            std::cout << players[i]->getName() << ", your total bet is: " << totalBet[i] << std::endl;
+        }hasBet++;
+    }
+}
+
+void Game::firstDraw(Deck& deck, Card& card) {
     for (int k=0; k<=1; k++){
         std::cout << players[k]->getName() << " gets: ";
         std::cout << " " << card <<  std::endl;
@@ -61,125 +110,55 @@ Game::Game(std::vector<std::shared_ptr<Player>>& players) : players(players) {}
         card = deck.deal();
 
     }
+}
 
-    int playerStands = 0; bool ended = false;
-    int hasBet = 0;
-    std::vector<int> totalBet(2);
-    totalBet[0] = totalBet[1] = 50;
-    for (int player = 1; player <= 2; player++) {
-        bool playerHasStayed = false;
+void Game::playingStage(int& playerStands, bool& playerHasStayed, bool& ended, int player, int& nrMoves, Card& card, Deck& deck, const std::vector<int>& totalBet) {
+    while (!playerHasStayed && !ended) {
+        std::cout << players[player-1]->getName() << ", choose 'hit' (0) or 'stay' (1): ";
+        int choice = 0;
+        nrMoves++;
+        players[player-1]->makeMove(choice, nrMoves);
 
-        for (int i=0; i<=1; i++) {
-            if (hasBet <= 1) {
-                std::cout << "\nInitial bet: 50 credits; Wanna bet more?" << std::endl;
-                std::cout << "Current player: " << players[i]->getName() << " (choose 'yes' (0) or 'no' (1)): "
-                          << std::endl;
-                int bettingChoice;
-
-//                if (i==1){
-//                    bettingChoice = 1;
-//                }else std::cin >> bettingChoice;
-
-                int betAmount;
-                players[i]->makeBet(bettingChoice, betAmount, 0);
-
-
-                switch (static_cast<Choices>(bettingChoice)) {
-                    case Hit:
-                            std::cout << "How much do you want to bet: ";
-                            players[i]->makeBet(bettingChoice, betAmount, 1);
-                            totalBet[i] = totalBet[i] + betAmount;
-                        std::cout << "(Chose to bet more)" << std::endl;
-                        break;
-                    case Stand:
-                        std::cout << "(Chose to keep bet)" << std::endl;
-                        break;
-                }
-                std::cout << players[i]->getName() << ", your total bet is: " << totalBet[i] << std::endl;
-            }hasBet++;
-        }
-
-
-        std::cout << '\n' << totalBet[0] << ", " << totalBet[1] << '\n';
-        std::cout << '\n';
-
-        while (!playerHasStayed && !ended) {
-            std::cout << players[player-1]->getName() << ", choose 'hit' (0) or 'stay' (1): ";
-            int choice;
-            players[player-1]->makeMove(choice);
-
-
-            switch (static_cast<Choices>(choice)) {
-                case Hit:
-                    std::cout << players[player-1]->getName() << " chose to hit." << std::endl;
-                    std::cout << players[player-1]->getName() << " gets: ";
-                    card = deck.deal();
-                    std::cout << " " << card << std::endl;
-                    if ((card.getRankValue() + 2) > 10) {
-                        if ((card.getRankValue() + 2) == 14) {
-                            if ((players[player-1]->getScore() + 11) <= 21) {
-                                players[player-1]->setScore(players[player-1]->getScore() + 1);
-                            } else {
-                                if ((players[player-1]->getScore() + 1) <= 21) {
-                                    players[player-1]->setScore(players[player-1]->getScore() - 9);
-                                }
+        switch (static_cast<Choices>(choice)) {
+            case Hit:
+                std::cout << players[player-1]->getName() << " chose to hit." << std::endl;
+                std::cout << players[player-1]->getName() << " gets: ";
+                card = deck.deal();
+                std::cout << " " << card << std::endl;
+                if ((card.getRankValue() + 2) > 10) {
+                    if ((card.getRankValue() + 2) == 14) {
+                        if ((players[player-1]->getScore() + 11) <= 21) {
+                            players[player-1]->setScore(players[player-1]->getScore() + 1);
+                        } else {
+                            if ((players[player-1]->getScore() + 1) <= 21) {
+                                players[player-1]->setScore(players[player-1]->getScore() - 9);
                             }
-
                         }
-                        players[player-1]->setScore(players[player-1]->getScore() + 10);
 
-                    } else players[player-1]->setScore(players[player-1]->getScore() + card.getRankValue() + 2);
-                    std::cout << players[player-1]->getName() << " got the score: " << players[player-1]->getScore() << std::endl;
-                    if (players[player-1]->getScore() == 21){
-                        playerHasStayed = true;
                     }
+                    players[player-1]->setScore(players[player-1]->getScore() + 10);
 
-                    if (players[0]->getScore() > 21 && players[1]->getScore() <= 21) {
-                        handleWinner(1, totalBet, ended);
-                    } else if (players[1]->getScore() > 21 && players[0]->getScore() <= 21) {
-                        handleWinner(0, totalBet, ended);
-                    }
-
-                    break;
-                case Stand:
-                    std::cout << players[player-1]->getName() << " chose to stay." << std::endl;
+                } else players[player-1]->setScore(players[player-1]->getScore() + card.getRankValue() + 2);
+                std::cout << players[player-1]->getName() << " got the score: " << players[player-1]->getScore() << std::endl;
+                if (players[player-1]->getScore() == 21){
                     playerHasStayed = true;
-                    break;
-                default:
-                    std::cout << "Invalid choice for Player " << player << ". Please choose 'hit' (0) or 'stay' (1)." << std::endl;
-            } playerStands++;
+                }
 
-        }
+                resolveRound(1, totalBet, ended);
+
+                break;
+            case Stand:
+                std::cout << players[player-1]->getName() << " chose to stay." << std::endl;
+                playerHasStayed = true;
+                break;
+            default:
+                std::cout << "Invalid choice for Player " << player << ". Please choose 'hit' (0) or 'stay' (1)." << std::endl;
+        } playerStands++;
 
     }
-    std::cout << '\n' << totalBet[0] << ", " << totalBet[1] << '\n';
+}
 
-    if (playerStands <= 0 || ended) {
-        return;
-    }
-
-    if (players[1]->getScore() < 21 && players[0]->getScore() < 21) {
-        if (players[1]->getScore() > players[0]->getScore()) {
-            handleWinner(1, totalBet, ended);
-        } else if (players[1]->getScore() < players[0]->getScore()) {
-            handleWinner(0, totalBet, ended);
-        } else {
-            std::cout << "Draw!" << std::endl;
-        }
-    } else if (players[1]->reachedTarget()) {
-        if (players[1]->getRole() == Role::Dealer) {
-            handleWinner(1, totalBet, ended);
-        } else {
-            std::cout << "Draw!" << std::endl;
-        }
-    } else if (players[0]->reachedTarget()) {
-        if (players[1]->getRole() == Role::Dealer) {
-            handleWinner(0, totalBet, ended);
-        } else {
-            std::cout << "Draw!" << std::endl;
-        }
-    }
-
+void Game::endMatch(const std::vector<int>& totalBet) {
     std::cout << "\nThe match has ended!" << std::endl;
 
     std::cout << '\n' << totalBet[0] << ", " << totalBet[1] << '\n';
@@ -188,6 +167,49 @@ Game::Game(std::vector<std::shared_ptr<Player>>& players) : players(players) {}
 
     std::cout << "\n" << players[1]->getName() << "'s Info:" << std::endl;
     std::cout << *players[1];
+}
+
+[[maybe_unused]] void Game::gamePlay(int mode) {
+    Deck deck;
+    deck.shuffle();
+
+    giveRole(mode);
+
+    Card card = deck.deal();
+
+    for  (int k=0; k<=1; k++){
+        players[k]->setScore(0);
+
+        std::cout << "\n" << players[k]->getName() << "'s Info:" << std::endl;
+        std::cout << *players[k];
+
+    } std::cout << std::endl;
+
+    firstDraw(deck,card);
+
+    int playerStands = 0; bool ended = false;
+    int hasBet = 0;
+    std::vector<int> totalBet(2);
+    totalBet[0] = totalBet[1] = 50;
+    for (int player = 1; player <= 2; player++) {
+        bool playerHasStayed = false;
+        bettingStage(hasBet, totalBet);
+
+        std::cout << '\n' << totalBet[0] << ", " << totalBet[1] << '\n';
+        std::cout << '\n';
+
+        int nrMoves = 0;
+        playingStage(playerStands,playerHasStayed,ended,player,nrMoves,card,deck,totalBet);
+
+    }
+    std::cout << '\n' << totalBet[0] << ", " << totalBet[1] << '\n';
+
+    if (playerStands <= 0 || ended) {
+        return;
+    }
+
+    resolveRound(2, totalBet, ended);
+    endMatch(totalBet);
 }
 
 [[maybe_unused]] void Game::handleWinner(int winnerIndex, const std::vector<int>& totalBet, bool& ended) {

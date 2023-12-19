@@ -37,9 +37,8 @@ public:
     [[nodiscard]] Role getRole() const;
     void setRole(Role new_role);
 
-    virtual int makeMove(int &choice){
+    virtual void makeMove(int &choice, [[maybe_unused]] int nrMoves){
         std::cin >> choice;
-        return choice;
     };
 
     virtual void makeBet(int &bettingChoice, int &betAmount, [[maybe_unused]] int betcase){
@@ -72,7 +71,7 @@ public:
 
 class CrazyBot : public Player {
 private:
-    int makeMove(int &choice) override;
+    void makeMove(int &choice, [[maybe_unused]] int nrMoves) override;
     void makeBet(int &bettingChoice, int &betAmount, [[maybe_unused]] int betcase) override;
 
 public:
@@ -96,11 +95,11 @@ public:
 
 class ParanoiaBot : public Player {
 private:
-    int makeMove(int &choice) override;
+    void makeMove(int &choice, [[maybe_unused]] int nrMoves) override;
     void makeBet(int &bettingChoice, int &betAmount, [[maybe_unused]] int betcase) override;
 
 public:
-    explicit ParanoiaBot(std::string initial_name = "Unknown ParanoiaBot", int initial_credits = 1000, int player_score = 0)
+    explicit ParanoiaBot(std::string initial_name = "Unknown CrazyBot", int initial_credits = 1000, int player_score = 0)
             : Player(std::move(initial_name), initial_credits, Role::Player, player_score) {}
 
     [[nodiscard]] std::shared_ptr<Player> clone() const override {
