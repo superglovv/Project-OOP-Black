@@ -118,13 +118,3 @@ public:
         return std::make_shared<ParanoiaBot>(*this);
     }
 };
-
-class Human : public Player {
-public:
-    explicit Human(std::string initial_name = "Human", int initial_credits = 1000, Role player_role = Role::Player, int player_score = 0)
-            : Player(std::move(initial_name), initial_credits, player_role, player_score) {}
-
-    [[nodiscard]] std::shared_ptr<Player> clone() const override {
-        return std::make_shared<Human>(*this);
-    }
-};
