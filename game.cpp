@@ -6,7 +6,6 @@
 #include "deck.h"
 #include <memory>
 #include "game.h"
-#include <unistd.h>
 
 enum Choices {
     Hit,
@@ -92,7 +91,6 @@ void Game::bettingStage(int &hasBet, std::vector<int>& totalBet, bool& bettingFi
 
         } catch (const std::exception &e) {
             std::cerr << "Error: " << e.what() << std::endl;
-            sleep(1);
         }
     }
     bettingFinished = true;
@@ -131,7 +129,6 @@ void Game::playingStage(int& playerStands, bool& playerHasStayed, bool& ended, i
             players[player-1]->makeMove(choice, nrMoves);
         }   catch (const std::exception &e) {
             std::cerr << "Error: " << e.what() << std::endl;
-            sleep(1);
         }
 
         switch (static_cast<Choices>(choice)) {
