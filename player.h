@@ -8,6 +8,8 @@
 #include <memory>
 #include "deck.h"
 #include "card.h"
+#include <stdexcept>
+#include "exceptions.h"
 
 enum class Role { Player, Dealer };
 
@@ -41,6 +43,9 @@ public:
 
     virtual void makeMove(int &choice, [[maybe_unused]] int nrMoves){
         std::cin >> choice;
+        if (choice < 0 || choice > 1){
+            throw InvalidMove();
+        }
     };
 
     virtual void makeBet(int &bettingChoice, int &betAmount, [[maybe_unused]] int betcase){
@@ -49,6 +54,9 @@ public:
             betAmount = 0;
         } else {
             std::cin >> betAmount;
+            if (betAmount+50 > credits) {
+                throw InvalidBet();
+            }
         }
     };
 

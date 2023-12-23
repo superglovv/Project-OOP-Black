@@ -6,6 +6,7 @@
 #include "deck.h"
 #include <memory>
 #include "game.h"
+#include <unistd.h>
 
 enum Choices {
     Hit,
@@ -61,32 +62,40 @@ void Game::resolveRound(int type, const std::vector<int>& totalBet, bool& ended)
     }
 }
 
-void Game::bettingStage(int &hasBet, std::vector<int>& totalBet) {
-    for (int i=0; i<=1; i++) {
-        if (hasBet <= 1) {
-            std::cout << "\nInitial bet: 50 credits; Wanna bet more?" << std::endl;
-            std::cout << "Current player: " << players[i]->getName() << " (choose 'yes' (0) or 'no' (1)): "
-                      << std::endl;
-            int bettingChoice;
+void Game::bettingStage(int &hasBet, std::vector<int>& totalBet, bool& bettingFinished) {
+    for (int i = 0; i <= 1; i++) {
+        try {
+            if (hasBet <= 1) {
+                std::cout << "\nInitial bet: 50 credits; Wanna bet more?" << std::endl;
+                std::cout << "Current player: " << players[i]->getName() << " (choose 'yes' (0) or 'no' (1)): "
+                          << std::endl;
+                int bettingChoice;
 
-            int betAmount;
-            players[i]->makeBet(bettingChoice, betAmount, 0);
+                int betAmount;
+                players[i]->makeBet(bettingChoice, betAmount, 0);
 
 
-            switch (static_cast<Choices>(bettingChoice)) {
-                case Hit:
-                    std::cout << "How much do you want to bet: ";
-                    players[i]->makeBet(bettingChoice, betAmount, 1);
-                    totalBet[i] = totalBet[i] + betAmount;
-                    std::cout << "(Chose to bet more)" << std::endl;
-                    break;
-                case Stand:
-                    std::cout << "(Chose to keep bet)" << std::endl;
-                    break;
+                switch (static_cast<Choices>(bettingChoice)) {
+                    case Hit:
+                        std::cout << "How much do you want to bet: ";
+                        players[i]->makeBet(bettingChoice, betAmount, 1);
+                        totalBet[i] = totalBet[i] + betAmount;
+                        std::cout << "(Chose to bet more)" << std::endl;
+                        break;
+                    case Stand:
+                        std::cout << "(Chose to keep bet)" << std::endl;
+                        break;
+                }
+                std::cout << players[i]->getName() << ", your total bet is: " << totalBet[i] << std::endl;
             }
-            std::cout << players[i]->getName() << ", your total bet is: " << totalBet[i] << std::endl;
-        }hasBet++;
+            hasBet++;
+
+        } catch (const std::exception &e) {
+            std::cerr << "Error: " << e.what() << std::endl;
+            sleep(1);
+        }
     }
+    bettingFinished = true;
 }
 
 void Game::firstDraw(Card& card) {
@@ -117,7 +126,13 @@ void Game::playingStage(int& playerStands, bool& playerHasStayed, bool& ended, i
         std::cout << players[player-1]->getName() << ", choose 'hit' (0) or 'stay' (1): ";
         int choice = 0;
         nrMoves++;
-        players[player-1]->makeMove(choice, nrMoves);
+
+        try {
+            players[player-1]->makeMove(choice, nrMoves);
+        }   catch (const std::exception &e) {
+            std::cerr << "Error: " << e.what() << std::endl;
+            sleep(1);
+        }
 
         switch (static_cast<Choices>(choice)) {
             case Hit:
@@ -151,9 +166,7 @@ void Game::playingStage(int& playerStands, bool& playerHasStayed, bool& ended, i
                 std::cout << players[player-1]->getName() << " chose to stay." << std::endl;
                 playerHasStayed = true;
                 break;
-            default:
-                std::cout << "Invalid choice for Player " << player << ". Please choose 'hit' (0) or 'stay' (1)." << std::endl;
-        } playerStands++;
+            } playerStands++;
 
     }
 }
@@ -197,12 +210,12 @@ void Game::dealerDeals(Card& card) {
     firstDraw(card);
 
     int playerStands = 0; bool ended = false;
-    int hasBet = 0;
+    int hasBet = 0; bool bettingFinished = false;
     std::vector<int> totalBet(2);
     totalBet[0] = totalBet[1] = 50;
     for (int player = 1; player <= 2; player++) {
         bool playerHasStayed = false;
-        bettingStage(hasBet, totalBet);
+        if (!bettingFinished) bettingStage(hasBet, totalBet, bettingFinished);
 
         std::cout << '\n' << totalBet[0] << ", " << totalBet[1] << '\n';
         std::cout << '\n';

@@ -22,7 +22,7 @@ public:
 private:
     void giveRole(int mode);
     void resolveRound(int type, const std::vector<int>& totalBet, bool& ended);
-    void bettingStage(int &hasBet, std::vector<int>& totalBet);
+    void bettingStage(int &hasBet, std::vector<int>& totalBet, bool& bettingFinished);
     void firstDraw(Card& card);
     void dealerDeals(Card& card);
     void playingStage(int& playerStands, bool& playerHasStayed, bool& ended, int player, int& nrMoves, Card& card, const std::vector<int>& totalBet);

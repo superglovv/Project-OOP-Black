@@ -37,11 +37,14 @@ int main() {
         std::cin >> chooseDifficulty;
         switch (static_cast<Difficulty>(chooseDifficulty)){
             case Crazybot:
-                players.push_back(std::make_shared<CrazyBot>("BOT 1"));
+                players.push_back(std::make_shared<CrazyBot>("BOT Krazy"));
                 break;
             case Paranoiabot:
-                players.push_back(std::make_shared<ParanoiaBot>("BOT 2"));
+                players.push_back(std::make_shared<ParanoiaBot>("BOT Hirohito"));
                 break;
+            default:
+                std::cerr << "!!! Invalid input !!!" << std::endl;
+                exit(0);
         }
     }
 
