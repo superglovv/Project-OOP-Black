@@ -54,7 +54,7 @@ public:
             betAmount = 0;
         } else {
             std::cin >> betAmount;
-            if (betAmount+50 > credits) {
+            if (betAmount+50 > credits || betAmount < 0) {
                 throw InvalidBet();
             }
         }
@@ -117,4 +117,19 @@ public:
     [[nodiscard]] std::shared_ptr<Player> clone() const override {
         return std::make_shared<ParanoiaBot>(*this);
     }
+};
+
+class CheaterBot : public Player {
+private:
+    void makeMove(int &choice, [[maybe_unused]] int nrMoves) override;
+    void makeBet(int &bettingChoice, int &betAmount, [[maybe_unused]] int betcase) override;
+public:
+    explicit CheaterBot(std::string initial_name = "Unknown CrazyBot", int initial_credits = 1000, int player_score = 0)
+            : Player(std::move(initial_name), initial_credits, Role::Player, player_score) {}
+
+    [[nodiscard]] std::shared_ptr<Player> clone() const override {
+        return std::make_shared<CheaterBot>(*this);
+    }
+
+    void secretMove ();
 };

@@ -120,6 +120,11 @@ void Game::firstDraw(Card& card) {
 }
 
 void Game::playingStage(int& playerStands, bool& playerHasStayed, bool& ended, int player, int& nrMoves, Card& card,  const std::vector<int>& totalBet) {
+    for (auto& item : players) {
+        if (auto cheater = std::dynamic_pointer_cast<CheaterBot>(item)) {
+            cheater->secretMove();
+        }
+    }
     while (!playerHasStayed && !ended) {
         std::cout << players[player-1]->getName() << ", choose 'hit' (0) or 'stay' (1): ";
         int choice = 0;
@@ -130,6 +135,7 @@ void Game::playingStage(int& playerStands, bool& playerHasStayed, bool& ended, i
         }   catch (const std::exception &e) {
             std::cerr << "Error: " << e.what() << std::endl;
         }
+
 
         switch (static_cast<Choices>(choice)) {
             case Hit:
@@ -155,7 +161,6 @@ void Game::playingStage(int& playerStands, bool& playerHasStayed, bool& ended, i
                 if (players[player-1]->getScore() == 21){
                     playerHasStayed = true;
                 }
-
                 resolveRound(1, totalBet, ended);
 
                 break;
@@ -164,7 +169,6 @@ void Game::playingStage(int& playerStands, bool& playerHasStayed, bool& ended, i
                 playerHasStayed = true;
                 break;
             } playerStands++;
-
     }
 }
 
@@ -205,6 +209,7 @@ void Game::dealerDeals(Card& card) {
     } std::cout << std::endl;
 
     firstDraw(card);
+
 
     int playerStands = 0; bool ended = false;
     int hasBet = 0; bool bettingFinished = false;

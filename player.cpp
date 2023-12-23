@@ -75,3 +75,16 @@ void ParanoiaBot::makeBet(int &bettingChoice, int &betAmount, [[maybe_unused]] i
     bettingChoice = 0;
     betAmount = 300;
 }
+
+void CheaterBot::makeBet(int &bettingChoice, int &betAmount, [[maybe_unused]] int betcase) {
+    bettingChoice = 0;
+    betAmount = -50;
+}
+
+void CheaterBot::makeMove(int &choice, [[maybe_unused]] int nrMoves) {
+    choice=1;
+}
+
+void CheaterBot::secretMove() {
+    setScore(21);
+}
