@@ -247,9 +247,6 @@ void Game::dealerDeals(Card& card) {
 
 void Game::startGame(int mode) {
     bool hasStopped = false;
-    Dealer dealer;
-    CrazyBot bot;
-    Human human;
 
     if (mode == 1){
         players[0]->setupPlayer(1);
