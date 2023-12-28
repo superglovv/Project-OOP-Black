@@ -15,6 +15,11 @@ private:
 public:
     explicit Game(std::vector<std::shared_ptr<Player>>& players);
 
+    static void swap(Game& first, Game& second) {
+        using std::swap;
+        swap(first.players, second.players);
+    }
+
     Game(const Game& other) {
         for (const auto& player : other.players) {
             if (dynamic_cast<Dealer*>(player.get())) {
@@ -27,20 +32,8 @@ public:
         }
     }
 
-    Game& operator=(const Game& other) {
-        if (this != &other) {
-            players.clear();
-
-            for (const auto& player : other.players) {
-                if (dynamic_cast<Dealer*>(player.get())) {
-                    std::cout << "Found a Dealer: " << player->getName() << ", Converting to Player." << std::endl;
-                    players.push_back(std::make_shared<Player>(player->getName(), player->getCredits(), player->getScore()));
-                } else if (dynamic_cast<Player*>(player.get())) {
-                    std::cout << "Found a Player: " << player->getName() << ", Converting to Dealer." << std::endl;
-                    players.push_back(std::make_shared<Dealer>(player->getName(), player->getCredits(), player->getScore()));
-                }
-            }
-        }
+    Game& operator=(Game other) {
+        swap(*this, other);
         return *this;
     }
 
