@@ -14,9 +14,9 @@ void Deck::shuffle() {
     static std::random_device rd;
     static std::mt19937 gen(rd());
 
-    for (unsigned int i = 0; i < size - 1; i++) {
-        static std::uniform_int_distribution<unsigned int> distribution(i, size - 1);
-        unsigned int j = distribution(gen);
+    for (size_t i = 0; i < size - 1; i++) {
+        std::uniform_int_distribution<size_t> distribution(i, size - 1);
+        size_t j = distribution(gen);
         std::swap(cards[i], cards[j]);
     }
 }
