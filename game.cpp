@@ -193,7 +193,7 @@ void Game::dealerDeals(Deck& deck, Card& card) {
     }
 }
 
-[[maybe_unused]] void Game::gamePlay(int mode) {
+[[maybe_unused]] void Game::gamePlay(int mode, int& roundNr) {
     Deck deck;
     deck.shuffle();
 
@@ -201,6 +201,8 @@ void Game::dealerDeals(Deck& deck, Card& card) {
     giveRole(mode);
 
     dealerDeals(deck,card);
+
+    std::cout << "\n!!! Round " << roundNr << " stars !!!" << std::endl;
 
     for  (int k=0; k<=1; k++){
         players[k]->setScore(0);
@@ -252,39 +254,30 @@ void Game::dealerDeals(Deck& deck, Card& card) {
     ended = true;
 }
 
-void Game::startGame(int mode) {
-    bool hasStopped = false;
+void Game::startGame(int& mode, int& roundNr, bool& hasStopped) {
+    std::cout << "Sa se inteleaga: " << roundNr << "\n";
 
-    if (mode == 1){
+
+    if (mode == 1 && roundNr < 2){
         players[0]->setupPlayer(1);
         players[1]->setupPlayer(2);
-    } else players[0]->setupPlayer(1);
+    } else{
+        if (mode == 0) players[0]->setupPlayer(1);
+    }
 
-    int nr = 1;
-    gamePlay(mode);
+    gamePlay(mode, roundNr);
 
     while (!hasStopped){
-        nr++;
         int choice2;
+        roundNr++;
         std::cout << " Choose if you wanna continue (choose 'Go' (0) or 'Stop' (1)): " <<  std::endl;
         std::cin >> choice2;
         switch (static_cast<Choices>(choice2)){
             case Hit:
-                std::cout << "\nRound " << nr << " begins: " << std::endl;
                 if (mode == 1){
-                    for (auto& player : players) {
-                        if (dynamic_cast<Dealer*>(player.get()) != nullptr) {
-                            std::cout << "Found a Dealer: " << player->getName() << ", Converting to Player." << std::endl;
-
-                            player = std::make_shared<Player>(player->getName(), player->getCredits(), player->getScore());
-                        } else if (dynamic_cast<Player*>(player.get()) != nullptr) {
-                            std::cout << "Found a Player: " << player->getName() << ", Converting to Dealer." << std::endl;
-
-                            player = std::make_shared<Dealer>(player->getName(), player->getCredits(), player->getScore());
-                        }
-                    }
+                    return;
                 }
-                gamePlay(mode);
+                gamePlay(mode, roundNr);
                 break;
             case Stand:
                 hasStopped = true;

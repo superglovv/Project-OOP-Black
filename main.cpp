@@ -54,6 +54,18 @@ int main() {
 
     Game game(players);
 
-    game.startGame(mode);
+    int roundNr = 1; bool hasStopped = false;
+
+    game.startGame(mode, roundNr, hasStopped);
+
+    if (mode == 1){
+        Game game2 = game;
+        while (!hasStopped){
+            if (roundNr % 2 == 0) { game2 = game; game2.startGame(mode, roundNr, hasStopped);}
+            else {game = game2; game.startGame(mode, roundNr, hasStopped);}
+        }
+    }
+
+
     return 0;
 }
