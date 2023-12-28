@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "card.h"
+#include <random>
 
 class Deck {
 public:
@@ -14,6 +15,9 @@ public:
 
 private:
     std::vector<Card> cards;
+    static std::random_device rd;
+    static std::mt19937 gen;
+
 };
 
 #endif

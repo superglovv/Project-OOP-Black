@@ -1,5 +1,7 @@
 #include "deck.h"
-#include <random>
+
+std::random_device Deck::rd;
+std::mt19937 Deck::gen(Deck::rd());
 
 Deck::Deck() {
     for (int suit = static_cast<int>(Card::Suit::Hearts); suit <= static_cast<int>(Card::Suit::Spades); ++suit) {
@@ -11,8 +13,6 @@ Deck::Deck() {
 
 void Deck::shuffle() {
     unsigned int size = cards.size();
-    static std::random_device rd;
-    static std::mt19937 gen(rd());
 
     for (size_t i = 0; i < size - 1; i++) {
         std::uniform_int_distribution<size_t> distribution(i, size - 1);
