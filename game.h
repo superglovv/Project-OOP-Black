@@ -23,9 +23,9 @@ private:
     void giveRole(int mode);
     void resolveRound(int type, const std::vector<int>& totalBet, bool& ended);
     void bettingStage(int &hasBet, std::vector<int>& totalBet, bool& bettingFinished);
-    void firstDraw(Card& card);
-    void dealerDeals(Card& card);
-    void playingStage(int& playerStands, bool& playerHasStayed, bool& ended, int player, int& nrMoves, Card& card, const std::vector<int>& totalBet);
+    void firstDraw(Deck& deck, Card& card);
+    void dealerDeals(Deck& deck, Card& card);
+    void playingStage(int& playerStands, bool& playerHasStayed, bool& ended, int player, int& nrMoves, Card& card, Deck& deck, const std::vector<int>& totalBet);
     void endMatch(const std::vector<int>& totalBet);
     void gamePlay(int mode);
     void handleWinner(int winnerIndex, const std::vector<int>& totalBet, bool& ended);

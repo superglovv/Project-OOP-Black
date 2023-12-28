@@ -50,8 +50,7 @@ std::ostream& operator<<(std::ostream& os, const Player& player) {
 //
 //void Player::display() const {}
 
-Card Dealer::dealCards() {
-    Deck deck;
+Card Dealer::dealCards(Deck& deck) {
     deck.shuffle();
 
     return deck.deal();

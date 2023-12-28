@@ -30,6 +30,8 @@ void Game::giveRole(int mode) {
 }
 
 void Game::resolveRound(int type, const std::vector<int>& totalBet, bool& ended) {
+    //type = 2 este pentru aflarea castigatorului la finalul rundei, iar ramura else (sau 1 dupa cum am pus in joc) reprezinta
+    //aflarea castigatorului in timpul rundei in cazul in care unul dintre players a depasit scorul de 21 (pierzand automat)
     if(type == 2){
         if (players[1]->getScore() < 21 && players[0]->getScore() < 21) {
             if (players[1]->getScore() > players[0]->getScore()) {
@@ -46,7 +48,7 @@ void Game::resolveRound(int type, const std::vector<int>& totalBet, bool& ended)
                 std::cout << "Draw!" << std::endl;
             }
         } else if (players[0]->reachedTarget()) {
-            if (players[1]->getRole() == Role::Dealer) {
+            if (players[0]->getRole() == Role::Dealer) {
                 handleWinner(0, totalBet, ended);
             } else {
                 std::cout << "Draw!" << std::endl;
@@ -96,7 +98,7 @@ void Game::bettingStage(int &hasBet, std::vector<int>& totalBet, bool& bettingFi
     bettingFinished = true;
 }
 
-void Game::firstDraw(Card& card) {
+void Game::firstDraw(Deck& deck, Card& card) {
     for (int k=0; k<=1; k++){
         std::cout << players[k]->getName() << " gets: ";
         std::cout << " " << card <<  std::endl;
@@ -114,12 +116,12 @@ void Game::firstDraw(Card& card) {
 
         } else players[k]->setScore(players[k]->getScore() + card.getRankValue() + 2);
         std::cout << players[k]->getName() << " got the score: " << players[k]->getScore() << std::endl;
-        dealerDeals(card);
+        dealerDeals(deck, card);
 
     }
 }
 
-void Game::playingStage(int& playerStands, bool& playerHasStayed, bool& ended, int player, int& nrMoves, Card& card,  const std::vector<int>& totalBet) {
+void Game::playingStage(int& playerStands, bool& playerHasStayed, bool& ended, int player, int& nrMoves, Card& card, Deck& deck,  const std::vector<int>& totalBet) {
     for (auto& item : players) {
         if (auto cheater = std::dynamic_pointer_cast<CheaterBot>(item)) {
             cheater->secretMove();
@@ -141,7 +143,7 @@ void Game::playingStage(int& playerStands, bool& playerHasStayed, bool& ended, i
             case Hit:
                 std::cout << players[player-1]->getName() << " chose to hit." << std::endl;
                 std::cout << players[player-1]->getName() << " gets: ";
-                dealerDeals(card);
+                dealerDeals(deck, card);
                 std::cout << " " << card << std::endl;
                 if ((card.getRankValue() + 2) > 10) {
                     if ((card.getRankValue() + 2) == 14) {
@@ -183,10 +185,10 @@ void Game::endMatch(const std::vector<int>& totalBet) {
     std::cout << *players[1];
 }
 
-void Game::dealerDeals(Card& card) {
+void Game::dealerDeals(Deck& deck, Card& card) {
     for (auto& player : players) {
         if (auto dealer = std::dynamic_pointer_cast<Dealer>(player)) {
-            card = dealer->dealCards();
+            card = dealer->dealCards(deck);
         }
     }
 }
@@ -198,7 +200,7 @@ void Game::dealerDeals(Card& card) {
     Card card(Card::Rank::Two, Card::Suit::Hearts);
     giveRole(mode);
 
-    dealerDeals(card);
+    dealerDeals(deck,card);
 
     for  (int k=0; k<=1; k++){
         players[k]->setScore(0);
@@ -208,7 +210,7 @@ void Game::dealerDeals(Card& card) {
 
     } std::cout << std::endl;
 
-    firstDraw(card);
+    firstDraw(deck, card);
 
 
     int playerStands = 0; bool ended = false;
@@ -223,7 +225,7 @@ void Game::dealerDeals(Card& card) {
         std::cout << '\n';
 
         int nrMoves = 0;
-        playingStage(playerStands,playerHasStayed,ended,player,nrMoves,card,totalBet);
+        playingStage(playerStands,playerHasStayed,ended,player,nrMoves,card, deck, totalBet);
 
     }
     std::cout << '\n' << totalBet[0] << ", " << totalBet[1] << '\n';
