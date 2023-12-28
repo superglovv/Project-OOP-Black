@@ -66,13 +66,13 @@ void CrazyBot::makeBet(int &bettingChoice, int &betAmount, [[maybe_unused]] int 
 }
 
 void ParanoiaBot::makeMove(int &choice, [[maybe_unused]] int nrMoves) {
-    if(nrMoves < 2) choice=0;
+    if(nrMoves < 3) choice=0;
     else choice=1;
 }
 
 void ParanoiaBot::makeBet(int &bettingChoice, int &betAmount, [[maybe_unused]] int betcase) {
     bettingChoice = 0;
-    betAmount = 300;
+    betAmount = 350;
 }
 
 void CheaterBot::makeBet(int &bettingChoice, int &betAmount, [[maybe_unused]] int betcase) {
