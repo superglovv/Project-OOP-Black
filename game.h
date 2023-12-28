@@ -56,6 +56,6 @@ private:
     void dealerDeals(Deck& deck, Card& card);
     void playingStage(int& playerStands, bool& playerHasStayed, bool& ended, int player, int& nrMoves, Card& card, Deck& deck, const std::vector<int>& totalBet);
     void endMatch(const std::vector<int>& totalBet);
-    void gamePlay(int mode, int& roundNr);
+    void gamePlay(int mode, const int& roundNr);
     void handleWinner(int winnerIndex, const std::vector<int>& totalBet, bool& ended);
 };

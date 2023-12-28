@@ -193,7 +193,7 @@ void Game::dealerDeals(Deck& deck, Card& card) {
     }
 }
 
-[[maybe_unused]] void Game::gamePlay(int mode, int& roundNr) {
+[[maybe_unused]] void Game::gamePlay(int mode, const int& roundNr) {
     Deck deck;
     deck.shuffle();
 
