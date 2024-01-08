@@ -91,7 +91,7 @@ void Game::bettingStage(int &hasBet, std::vector<int>& totalBet, bool& bettingFi
             }
             hasBet++;
 
-        } catch (const std::exception &e) {
+        } catch (const InvalidBet &e) {
             std::cerr << "Error: " << e.what() << std::endl;
         }
     }
@@ -134,7 +134,7 @@ void Game::playingStage(int& playerStands, bool& playerHasStayed, bool& ended, i
 
         try {
             players[player-1]->makeMove(choice, nrMoves);
-        }   catch (const std::exception &e) {
+        }   catch (const InvalidMove &e) {
             std::cerr << "Error: " << e.what() << std::endl;
         }
 

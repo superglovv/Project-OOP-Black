@@ -9,7 +9,8 @@ enum Choose {
 enum Difficulty {
     Crazybot = 1,
     Paranoiabot =2,
-    Cheater = 3
+    Cheater = 3,
+    Sleepybot = 4
 };
 
 int main() {
@@ -34,7 +35,7 @@ int main() {
 
     if (players.size() < 2){
         int chooseDifficulty;
-        std::cout << " Choose difficulty: \n 1) vs Crazy Bot \n 2) vs Paranoia Bot\n 3) vs UMad? Bot" <<  std::endl;
+        std::cout << " Choose difficulty: \n 1) vs Crazy Bot \n 2) vs Paranoia Bot\n 3) vs UMad? Bot\n 4) vs AmEEPY Bot" <<  std::endl;
         std::cin >> chooseDifficulty;
         switch (static_cast<Difficulty>(chooseDifficulty)){
             case Crazybot:
@@ -45,6 +46,9 @@ int main() {
                 break;
             case Cheater:
                 players.push_back(std::make_shared<CheaterBot>("BOT UMad?"));
+                break;
+            case Sleepybot:
+                players.push_back(std::make_shared<SleepyBot>("BOT AmEEPY"));
                 break;
             default:
                 std::cerr << "!!! Invalid input !!!" << std::endl;

@@ -119,6 +119,20 @@ public:
     }
 };
 
+class SleepyBot : public Player {
+private:
+    void makeMove(int &choice, [[maybe_unused]] int nrMoves) override;
+    void makeBet(int &bettingChoice, int &betAmount, [[maybe_unused]] int betcase) override;
+
+public:
+    explicit SleepyBot(std::string initial_name = "Unknown SleepyBot", int initial_credits = 1000, int player_score = 0)
+            : Player(std::move(initial_name), initial_credits, Role::Player, player_score) {}
+
+    [[nodiscard]] std::shared_ptr<Player> clone() const override {
+        return std::make_shared<SleepyBot>(*this);
+    }
+};
+
 class CheaterBot : public Player {
 private:
     void makeMove(int &choice, [[maybe_unused]] int nrMoves) override;

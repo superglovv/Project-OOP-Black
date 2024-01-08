@@ -1,4 +1,6 @@
 #include "player.h"
+#include <thread>
+#include <chrono>
 
 int Player::getCredits() const {
     return credits;
@@ -86,4 +88,23 @@ void CheaterBot::makeMove(int &choice, [[maybe_unused]] int nrMoves) {
 
 void CheaterBot::secretMove() {
     setScore(21);
+}
+
+void SleepyBot::makeBet(int &bettingChoice, [[maybe_unused]] int &betAmount, [[maybe_unused]] int betcase) {
+    std::this_thread::sleep_for (std::chrono::seconds(3));
+    std::cout << "zZzZ" << std::endl;
+    std::this_thread::sleep_for (std::chrono::seconds(3));
+    std::cout << "I don't wanna bet!!" << std::endl;
+    bettingChoice = 1;
+}
+
+void SleepyBot::makeMove(int &choice, [[maybe_unused]] int nrMoves) {
+    if(nrMoves < 2){
+        std::this_thread::sleep_for (std::chrono::seconds(3));
+        std::cout << "zZzZ" << std::endl;
+        std::this_thread::sleep_for (std::chrono::seconds(3));
+        std::cout << "Gotta make a move already ?!!" << std::endl;
+        choice=0;
+    }
+    else choice=1;
 }
