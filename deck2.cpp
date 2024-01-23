@@ -1,6 +1,4 @@
-#include "deck.h"
 #include "deck2.h"
-
 
 std::random_device Deck::rd;
 std::mt19937 Deck::gen(Deck::rd());
@@ -11,6 +9,11 @@ Deck::Deck() {
             cards.emplace_back(static_cast<Card::Rank>(rank), static_cast<Card::Suit>(suit));
         }
     }
+}
+
+Deck& Deck::getInstance() {
+    static Deck instance;
+    return instance;
 }
 
 void Deck::shuffle() {
@@ -33,4 +36,6 @@ Card Deck::deal() {
     }
 }
 
-
+std::size_t Deck::getDeckSize() {
+    return cards.size();
+}

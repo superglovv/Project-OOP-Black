@@ -35,3 +35,4 @@ std::ostream& operator<<(std::ostream& os, const Card& card) {
     os << rank_str << " of " << suit_str;
     return os;
 }
+

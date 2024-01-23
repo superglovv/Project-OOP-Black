@@ -6,7 +6,8 @@
 #include <algorithm>
 #include <random>
 #include <memory>
-#include "deck.h"
+//#include "deck.h"
+#include "deck2.h"
 #include "card.h"
 #include <stdexcept>
 #include "exceptions.h"

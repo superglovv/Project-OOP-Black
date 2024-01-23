@@ -21,10 +21,11 @@ set(is_rel_with_deb "$<CONFIG:RelWithDebInfo>")
 set(debug_mode "$<OR:${is_debug},${is_rel_with_deb}>")
 set(SOURCE_FILES
         main.cpp
-        deck.cpp
+#        deck.cpp
         card.cpp
         player.cpp
         game.cpp
+        deck2.cpp
 )
 ###############################################################################
 

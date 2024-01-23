@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <random>
 #include "player.h"
-#include "deck.h"
+#include "deck2.h"
 #include <memory>
 #include "game.h"
 
@@ -194,10 +194,15 @@ void Game::dealerDeals(Deck& deck, Card& card) {
 }
 
 [[maybe_unused]] void Game::gamePlay(int mode, const int& roundNr) {
-    Deck deck;
+    Deck& deck = Deck::getInstance();
+    std::cout << "Before deck.shuffle()\n";
+    std::cout << "Deck size before shuffle: " << deck.getDeckSize() << std::endl;
     deck.shuffle();
+    std::cout << "After deck.shuffle()\n";
 
     Card card(Card::Rank::Two, Card::Suit::Hearts);
+
+
     giveRole(mode);
 
     dealerDeals(deck,card);
@@ -281,6 +286,8 @@ void Game::startGame(int& mode, int& roundNr, bool& hasStopped) {
                 break;
             case Stand:
                 hasStopped = true;
+                std::cout << "Rezultate finale: \n\n0" << *players[0] << std::endl;
+                std::cout << *players[1] << std::endl;
                 break;
         }
     }

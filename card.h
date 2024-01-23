@@ -24,3 +24,7 @@ private:
 };
 
 #endif // CARD_H
+
+
+
+
