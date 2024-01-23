@@ -13,6 +13,21 @@ enum Difficulty {
     Sleepybot = 4
 };
 
+std::shared_ptr<Player> createPlayer(Difficulty difficulty) {
+    switch (difficulty) {
+        case Crazybot:
+            return std::make_shared<CrazyBot>("BOT Krazy");
+        case Paranoiabot:
+            return std::make_shared<ParanoiaBot>("BOT Hirohito");
+        case Cheater:
+            return std::make_shared<CheaterBot>("BOT UMad?");
+        case Sleepybot:
+            return std::make_shared<SleepyBot>("BOT AmEEPY");
+        default:
+            throw std::invalid_argument("Invalid player difficulty");
+    }
+}
+
 int main() {
     std::vector<std::shared_ptr<Player>> players;
 
@@ -37,23 +52,7 @@ int main() {
         int chooseDifficulty;
         std::cout << " Choose difficulty: \n 1) vs Crazy Bot \n 2) vs Paranoia Bot\n 3) vs UMad? Bot\n 4) vs AmEEPY Bot" <<  std::endl;
         std::cin >> chooseDifficulty;
-        switch (static_cast<Difficulty>(chooseDifficulty)){
-            case Crazybot:
-                players.push_back(std::make_shared<CrazyBot>("BOT Krazy"));
-                break;
-            case Paranoiabot:
-                players.push_back(std::make_shared<ParanoiaBot>("BOT Hirohito"));
-                break;
-            case Cheater:
-                players.push_back(std::make_shared<CheaterBot>("BOT UMad?"));
-                break;
-            case Sleepybot:
-                players.push_back(std::make_shared<SleepyBot>("BOT AmEEPY"));
-                break;
-            default:
-                std::cerr << "!!! Invalid input !!!" << std::endl;
-                exit(0);
-        }
+        players.push_back(createPlayer(static_cast<Difficulty>(chooseDifficulty)));
     }
 
     Game game(players);

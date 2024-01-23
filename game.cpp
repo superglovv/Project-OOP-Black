@@ -286,7 +286,7 @@ void Game::startGame(int& mode, int& roundNr, bool& hasStopped) {
                 break;
             case Stand:
                 hasStopped = true;
-                std::cout << "Rezultate finale: \n\n0" << *players[0] << std::endl;
+                std::cout << "Rezultate finale: \n\n" << *players[0] << std::endl;
                 std::cout << *players[1] << std::endl;
                 break;
         }

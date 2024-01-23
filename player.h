@@ -13,6 +13,14 @@
 #include "exceptions.h"
 
 enum class Role { Player, Dealer };
+enum class PlayerType {
+    Player,
+    Dealer,
+    Crazy,
+    Paranoia,
+    Sleepy,
+    Cheater
+};
 
 class Player {
 protected:
@@ -147,4 +155,26 @@ public:
     }
 
     void secretMove ();
+};
+
+class PlayerFactory {
+public:
+    [[maybe_unused]] static std::shared_ptr<Player> createPlayer(PlayerType type, const std::string& name = "Unknown", int initial_credits = 1000, int player_score = 0) {
+        switch (type) {
+            case PlayerType::Player:
+                return std::make_shared<Player>(name, initial_credits, player_score);
+            case PlayerType::Dealer:
+                return std::make_shared<Dealer>(name, initial_credits, player_score);
+            case PlayerType::Crazy:
+                return std::make_shared<CrazyBot>(name, initial_credits, player_score);
+            case PlayerType::Paranoia:
+                return std::make_shared<ParanoiaBot>(name, initial_credits, player_score);
+            case PlayerType::Sleepy:
+                return std::make_shared<SleepyBot>(name, initial_credits, player_score);
+            case PlayerType::Cheater:
+                return std::make_shared<CheaterBot>(name, initial_credits, player_score);
+            default:
+                throw std::invalid_argument("Invalid player type");
+        }
+    }
 };
